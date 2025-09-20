@@ -1,4 +1,2 @@
-export const BE_BASE_URL = import.meta.env.VITE_APP_BE_BASE_URL;
-
-export const API_KEY = import.meta.env.VITE_APP_API_KEY;
-    
+export const CONVEX_HTTP_URL = import.meta.env.VITE_CONVEX_URL;
+export const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
