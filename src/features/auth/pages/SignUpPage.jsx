@@ -1,5 +1,7 @@
+import { SignUp } from "@clerk/clerk-react";
+
 function SignUpPage() {
-    return <div>SignUp Page</div>;
+    return <SignUp forceRedirectUrl={"/login-callback"} />;
 }
 
 export default SignUpPage;
