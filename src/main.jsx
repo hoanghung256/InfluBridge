@@ -8,6 +8,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { rootReducer } from "./store/index.js";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { CLERK_PUBLISHABLE_KEY } from "./constants/env.js";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const router = createBrowserRouter(routes);
 const store = configureStore({ reducer: rootReducer });
