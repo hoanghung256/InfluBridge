@@ -1,4 +1,4 @@
-import { mutation } from "../_generated/server";
+import { query, mutation } from "../_generated/server";
 import { v } from "convex/values";
 
 /**
@@ -119,3 +119,54 @@ function validatePeriods(periods) {
         }
     }
 }
+
+/**
+ * getCampaign
+ * Fetch campaigns for a given brand with optional status filter + simple pagination.
+ * NOTE: This uses in-memory slicing after collection. For very large datasets,
+ * implement a cursor-based approach instead.
+ */
+export const getCampaignByBrandId = query({
+    args: {
+        brandId: v.id("brands"),
+        status: v.optional(v.string()),
+        page: v.optional(v.number()), // 1-based page index
+        pageSize: v.optional(v.number()), // items per page
+    },
+    handler: async (ctx, { brandId, status, page, pageSize }) => {
+        const safePageSize =
+            pageSize && pageSize > 0
+                ? Math.min(pageSize, 100) // hard cap
+                : 10;
+        const safePage = page && page > 0 ? page : 1;
+
+        let q = ctx.db.query("campaigns");
+        try {
+            q = q.withIndex("by_brandId", (q) => q.eq("brandId", brandId));
+        } catch {
+            // index missing fallback
+        }
+
+        const all = await q.collect();
+        const filtered = all
+            .filter((c) => c.brandId === brandId && (status ? c.status === status : true))
+            .sort((a, b) => b._creationTime - a._creationTime);
+
+        const total = filtered.length;
+        const start = (safePage - 1) * safePageSize;
+        const end = start + safePageSize;
+        const slice = filtered.slice(start, end);
+
+        return {
+            data: slice,
+            pagination: {
+                page: safePage,
+                pageSize: safePageSize,
+                total,
+                totalPages: Math.ceil(total / safePageSize) || 1,
+                hasNext: end < total,
+                hasPrev: start > 0,
+            },
+        };
+    },
+});

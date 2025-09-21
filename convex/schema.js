@@ -3,7 +3,7 @@ import { v } from "convex/values";
 
 export default defineSchema({
     users: defineTable({
-        clerkUserId: v.string(), // Clerk user ID
+        clerkUserId: v.string(),
         email: v.string(),
         fullname: v.string(),
         role: v.union(v.literal("brand"), v.literal("influencer"), v.literal("admin")),
@@ -59,7 +59,7 @@ export default defineSchema({
         contentRequired: v.string(),
         location: v.string(),
         status: v.union(v.literal("open"), v.literal("inprogress"), v.literal("completed")),
-    }),
+    }).index("by_brandId", ["brandId"]),
 
     campaignApplications: defineTable({
         campaignId: v.id("campaigns"),
