@@ -42,8 +42,6 @@ function GeneralNavbar() {
     const [open, setOpen] = useState(false);
     const { user } = useClerkUserData();
 
-    console.log("Clerk User Data in Navbar:", user);
-
     const navItems = [
         { label: "Home", to: "/" },
         { label: "Campaigns", to: "/campaigns" },

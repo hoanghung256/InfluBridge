@@ -49,6 +49,7 @@ export default defineSchema({
             active: v.object({ start: v.number(), end: v.number() }),
             review: v.object({ start: v.number(), end: v.number() }),
         }),
+        socialPlatforms: v.array(v.string()),
         applyLimit: v.optional(v.number()),
         description: v.string(),
         budget: v.number(),

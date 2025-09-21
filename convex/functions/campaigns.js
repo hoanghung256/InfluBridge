@@ -1,4 +1,4 @@
-import { mutation } from "./_generated/server";
+import { mutation } from "../_generated/server";
 import { v } from "convex/values";
 
 /**
@@ -22,6 +22,7 @@ export const createCampaign = mutation({
             active: v.object({ start: v.number(), end: v.number() }),
             review: v.object({ start: v.number(), end: v.number() }),
         }),
+        socialPlatforms: v.array(v.string()),
         applyLimit: v.optional(v.number()),
         description: v.string(),
         budget: v.number(),
@@ -78,6 +79,7 @@ export const createCampaign = mutation({
             periods: args.periods,
             applyLimit: args.applyLimit,
             description: args.description.trim(),
+            socialPlatforms: args.socialPlatforms,
             budget: args.budget,
             reward: args.reward.trim(),
             policyAndCondition: args.policyAndCondition.trim(),

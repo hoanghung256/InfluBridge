@@ -4,18 +4,19 @@ import { convexQueryOneTime } from "../service/convexClient";
 
 function useCategories() {
     const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchCategories = async () => {
             const data = await convexQueryOneTime(api.functions.categories.getAll);
             setCategories(data);
-            console.log("Fetched categories:", data);
+            setLoading(false);
         };
 
         fetchCategories();
     }, []);
 
-    return categories;
+    return { categories, loading };
 }
 
 export default useCategories;
