@@ -10,17 +10,16 @@ export default defineSchema({
         phone: v.string(),
         isActive: v.boolean(),
         isVerified: v.boolean(),
-    }),
+    }).index("by_clerkUserId", ["clerkUserId"]),
 
     brands: defineTable({
         userId: v.id("users"),
         brandName: v.string(),
-        industry: v.string(),
         budgetMin: v.number(),
         budgetMax: v.number(),
         categories: v.array(v.id("categories")),
         description: v.optional(v.string()),
-    }),
+    }).index("by_user", ["userId"]),
 
     influencers: defineTable({
         userId: v.id("users"),
@@ -28,7 +27,7 @@ export default defineSchema({
         categories: v.array(v.id("categories")),
         priceMin: v.number(),
         priceMax: v.number(),
-    }),
+    }).index("by_user", ["userId"]),
 
     socialAccounts: defineTable({
         influencerId: v.id("influencers"),

@@ -2,7 +2,7 @@ import { useUser, useAuth } from "@clerk/clerk-react";
 import { useCallback, useMemo } from "react";
 
 /**
- * useUserData
+ * useClerkUserData
  * Wraps Clerk hooks to expose a convenient, memoized user object + helpers.
  */
 export function useClerkUserData() {

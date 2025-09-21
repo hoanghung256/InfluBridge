@@ -19,6 +19,8 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import useClerkUserData from "../../hooks/useClerkUserData";
+import { UserButton } from "@clerk/clerk-react";
 
 function GeneralLayout() {
     return (
@@ -38,6 +40,9 @@ function GeneralNavbar() {
     const theme = useTheme();
     const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
     const [open, setOpen] = useState(false);
+    const { user } = useClerkUserData();
+
+    console.log("Clerk User Data in Navbar:", user);
 
     const navItems = [
         { label: "Home", to: "/" },
@@ -61,12 +66,18 @@ function GeneralNavbar() {
             </List>
             <Divider />
             <Box sx={{ p: 2, display: "flex", gap: 1 }}>
-                <Button fullWidth variant="contained" size="small" href="/login">
-                    Sign In
-                </Button>
-                <Button fullWidth variant="outlined" size="small" href="/sign-up">
-                    Gest Started
-                </Button>
+                {user ? (
+                    <UserButton afterSignOutUrl="/" />
+                ) : (
+                    <>
+                        <Button fullWidth variant="contained" size="small" href="/login">
+                            Sign In
+                        </Button>
+                        <Button fullWidth variant="outlined" size="small" href="/sign-up">
+                            Get Started
+                        </Button>
+                    </>
+                )}
             </Box>
         </Box>
     );
@@ -108,16 +119,20 @@ function GeneralNavbar() {
 
                     <Box sx={{ flexGrow: 1 }} />
 
-                    {isMdUp && (
-                        <Box sx={{ display: "flex", gap: 1 }}>
-                            <Button component={RouterLink} to="/login" variant="text" size="small">
-                                Sign In
-                            </Button>
-                            <Button component={RouterLink} to="/register" variant="contained" size="small">
-                                Get Started
-                            </Button>
-                        </Box>
-                    )}
+                    <Box sx={{ display: "flex", gap: 1 }}>
+                        {isMdUp && user ? (
+                            <UserButton afterSignOutUrl="/" />
+                        ) : (
+                            <>
+                                <Button component={RouterLink} to="/login" variant="text" size="small">
+                                    Sign In
+                                </Button>
+                                <Button component={RouterLink} to="/sign-up" variant="contained" size="small">
+                                    Get Started
+                                </Button>
+                            </>
+                        )}
+                    </Box>
                 </Toolbar>
             </AppBar>
 
