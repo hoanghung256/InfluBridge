@@ -1,5 +1,7 @@
+import { Box } from "@mui/material";
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 import { SiTiktok } from "react-icons/si";
+import BoltOutlinedIcon from "@mui/icons-material/BoltOutlined";
 
 export const icons = {
     facebook: <FacebookIcon />,
@@ -43,4 +45,23 @@ export function TiktokIcon() {
 
 export function YoutubeIcon() {
     return <FaYoutube size={"1em"} color="#FF0000" style={{ borderRadius: "8px" }} />;
+}
+
+export default function AppIcon() {
+    return (
+        <Box
+            sx={{
+                width: 34,
+                height: 34,
+                borderRadius: 1.2,
+                bgcolor: "primary.main",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "primary.contrastText",
+            }}
+        >
+            <BoltOutlinedIcon fontSize="small" />
+        </Box>
+    );
 }
