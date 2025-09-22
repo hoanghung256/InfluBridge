@@ -166,11 +166,11 @@ function Footer() {
                         size="small"
                         sx={{
                             justifyContent: "flex-start",
-                            color: "whitesmoke",
+                            color: "text.primary",
                             textTransform: "none",
                             px: 0,
                             minWidth: 0,
-                            "&:hover": { color: "text.primary", background: "transparent" },
+                            "&:hover": { color: "text.secondary", background: "transparent" },
                         }}
                     >
                         {i.label}

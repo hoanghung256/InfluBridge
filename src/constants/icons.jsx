@@ -50,16 +50,16 @@ export function YoutubeIcon() {
 export default function AppIcon() {
     return (
         <Box
-            sx={{
+            sx={(theme) => ({
                 width: 34,
                 height: 34,
-                borderRadius: 1.2,
-                bgcolor: "primary.main",
+                borderRadius: 1,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 color: "primary.contrastText",
-            }}
+                background: `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 50%, ${theme.palette.secondary.main} 100%)`,
+            })}
         >
             <BoltOutlinedIcon fontSize="small" />
         </Box>
