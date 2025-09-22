@@ -18,6 +18,7 @@ import {
     Zoom,
     Grid,
     Stack,
+    colors,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -102,7 +103,7 @@ function GeneralNavbar() {
                         component={RouterLink}
                         to="/"
                         style={{ textDecoration: "none" }}
-                        sx={{ fontWeight: 700, color: "text.primary", flexGrow: { xs: 1, md: 0 } }}
+                        sx={{ fontWeight: 700, color: "primary.main", flexGrow: { xs: 1, md: 0 } }}
                     >
                         InfluBridge
                     </Typography>
@@ -114,7 +115,7 @@ function GeneralNavbar() {
                                     key={item.to}
                                     component={RouterLink}
                                     to={item.to}
-                                    color="inherit"
+                                    color="primary.light"
                                     sx={{ fontWeight: 500 }}
                                 >
                                     {item.label}
@@ -166,7 +167,7 @@ function Footer() {
                         size="small"
                         sx={{
                             justifyContent: "flex-start",
-                            color: "text.primary",
+                            color: "text.light",
                             textTransform: "none",
                             px: 0,
                             minWidth: 0,

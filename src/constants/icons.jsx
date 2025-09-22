@@ -58,7 +58,7 @@ export default function AppIcon() {
                 alignItems: "center",
                 justifyContent: "center",
                 color: "primary.contrastText",
-                background: `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 50%, ${theme.palette.secondary.main} 100%)`,
+                background: `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 50%, ${theme.palette.secondary.dark} 100%)`,
             })}
         >
             <BoltOutlinedIcon fontSize="small" />

@@ -1,30 +1,32 @@
 import { createTheme } from "@mui/material/styles";
-import { purple, deepPurple, grey, common } from "@mui/material/colors";
+import { purple, blue, grey, common } from "@mui/material/colors";
 
 const theme = createTheme({
     cssVariables: true,
     palette: {
         mode: "light",
         primary: {
-            light: purple[300],
-            main: purple[500],
-            dark: purple[700],
+            light: purple[100],
+            main: purple[300], // also primary button color 
+            dark: purple[500],
         },
         secondary: {
-            light: deepPurple[300],
-            main: deepPurple[500],
-            dark: deepPurple[700],
+            light: blue[200],
+            main: blue[400], // xanh biển vừa
+            dark: blue[600],
             contrastText: "#ffffff",
         },
         background: {
-            default: "#fafafa",
+            default: "#fdfdfd",
             paper: "#ffffff",
         },
         divider: grey[300],
         text: {
-            secondary: grey[100],
-            primary: grey[500],
-            disabled: grey[900],
+            primary: grey[900],
+            secondary: grey[700],
+            light: grey[500],
+            dark: common.black,
+            disabled: grey[400],
         },
     },
     typography: {
@@ -41,12 +43,22 @@ const theme = createTheme({
             defaultProps: { disableElevation: true },
             styleOverrides: {
                 root: { borderRadius: 8 },
+                containedPrimary: {
+                    "&:hover": {
+                        backgroundColor: purple[400], // hover tím đậm hơn 1 tone
+                    },
+                },
+                containedSecondary: {
+                    "&:hover": {
+                        backgroundColor: blue[500], // hover xanh đậm hơn 1 tone
+                    },
+                },
             },
         },
         MuiAppBar: {
             styleOverrides: {
                 colorPrimary: {
-                    backgroundImage: `linear-gradient(90deg, ${purple[600]}, ${deepPurple[500]})`,
+                    backgroundImage: `linear-gradient(90deg, ${purple[100]}, ${blue[100]})`,
                 },
             },
         },
