@@ -1,12 +1,15 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
+import { FIREBASE_API_KEY } from "../constants/env";
 
 /**
  * Initialize (idempotent) Firebase app using Vite env vars.
  */
 function getFirebase() {
     const firebaseConfig = {
-        apiKey: "AIzaSyCTryjaKZ_gWLKLSAcWCO9vxUgFXPN0ewY",
+        // apiKey: "AIzaSyCTryjaKZ_gWLKLSAcWCO9vxUgFXPN0ewY",
+        apiKey: "AIzaSyCF2XucGeZnP1Vw3xn-Q6VfwJy_oH82WkQ",
+        apiKey: FIREBASE_API_KEY,
         authDomain: "influ-bridge.firebaseapp.com",
         projectId: "influ-bridge",
         storageBucket: "influ-bridge.firebasestorage.app",
