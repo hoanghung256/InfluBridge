@@ -7,8 +7,6 @@ import { FIREBASE_API_KEY } from "../constants/env";
  */
 function getFirebase() {
     const firebaseConfig = {
-        // apiKey: "AIzaSyCTryjaKZ_gWLKLSAcWCO9vxUgFXPN0ewY",
-        apiKey: "AIzaSyCF2XucGeZnP1Vw3xn-Q6VfwJy_oH82WkQ",
         apiKey: FIREBASE_API_KEY,
         authDomain: "influ-bridge.firebaseapp.com",
         projectId: "influ-bridge",
