@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setUserData } from "../../../store/authSlice";
+import { useEffect } from "react";
 
 function SignOutCallback() {
     const dispatch = useDispatch();

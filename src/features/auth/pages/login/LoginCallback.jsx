@@ -25,7 +25,7 @@ function LoginCallback() {
     const [fetchedUser, setFetchedUser] = useState(null);
     const [submitting, setSubmitting] = useState(false);
     const [isCheckingUserExist, setIsCheckingUserExist] = useState(true);
-    const categories = useCategories();
+    const { categories: categoryOptions = [], loading: catLoading } = useCategories();
 
     const [form, setForm] = useState({
         clerkUserId: "",
@@ -305,10 +305,12 @@ function LoginCallback() {
                         />
                         <Autocomplete
                             multiple
-                            options={categories}
+                            options={categoryOptions}
+                            loading={catLoading}
                             value={form.categories}
                             onChange={handleCategoriesChange}
-                            getOptionLabel={(option) => option.name}
+                            getOptionLabel={(option) => option?.name || ""}
+                            isOptionEqualToValue={(o, v) => o._id === v._id}
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (
                                     <Chip

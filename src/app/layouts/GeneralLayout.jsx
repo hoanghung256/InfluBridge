@@ -65,7 +65,7 @@ function GeneralNavbar() {
             <Divider />
             <Box sx={{ p: 2, display: "flex", gap: 1 }}>
                 {user ? (
-                    <UserButton afterSignOutUrl="/" />
+                    <UserButton afterSignOutUrl="/signout-callback" />
                 ) : (
                     <>
                         <Button fullWidth variant="contained" size="small" href="/login">
@@ -119,7 +119,7 @@ function GeneralNavbar() {
 
                     <Box sx={{ display: "flex", gap: 1 }}>
                         {isMdUp && user ? (
-                            <UserButton afterSignOutUrl="/" />
+                            <UserButton afterSignOutUrl="/signout-callback" />
                         ) : (
                             <>
                                 <Button component={RouterLink} to="/login" variant="text" size="small">
