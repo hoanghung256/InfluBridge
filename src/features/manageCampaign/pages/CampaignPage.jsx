@@ -20,6 +20,7 @@ import useConvexUserData from "../../../hooks/useConvexUserData";
 import useCategories from "../../../hooks/useCategories";
 import { convexQueryOneTime } from "../../../service/convexClient";
 import { api } from "../../../../convex/_generated/api";
+import { useNavigate } from "react-router-dom";
 
 const PAGE_SIZE = 10;
 
@@ -27,6 +28,7 @@ function CampaignPage() {
     const user = useConvexUserData();
     const brandId = user?.detail?._id || null;
     const { categories = [] } = useCategories() || {};
+    const navigate = useNavigate();
 
     const [status, setStatus] = useState("");
     const [page, setPage] = useState(1);
@@ -116,6 +118,9 @@ function CampaignPage() {
                             </IconButton>
                         </span>
                     </Tooltip>
+                    <Button variant="contained" color="primary" onClick={() => navigate("/campaigns/create")}>
+                        Create Campaign
+                    </Button>
                 </Stack>
 
                 <Divider sx={{ mb: 2 }} />

@@ -72,7 +72,7 @@ function LoginCallback() {
             })();
         }
         if (fetchedUser) {
-            if (fetchedUser.role === "brand") navigate("/campaign/create");
+            if (fetchedUser.role === "brand") navigate("/campaigns");
             if (fetchedUser.role === "influencer") navigate("/");
         }
     }, [user, fetchedUser, navigate]);
