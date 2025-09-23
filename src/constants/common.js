@@ -20,3 +20,9 @@ export const SOCIAL_PLATFORM_OPTIONS = [
     { label: "TikTok", value: SOCIAL_PLATFORMS.TIKTOK },
     { label: "YouTube", value: SOCIAL_PLATFORMS.YOUTUBE },
 ];
+
+export const USER_ROLES = {
+    BRAND: "brand",
+    INFLUENCER: "influencer",
+    ADMIN: "admin",
+};

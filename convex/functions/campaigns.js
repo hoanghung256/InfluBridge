@@ -170,3 +170,55 @@ export const getCampaignByBrandId = query({
         };
     },
 });
+
+export const getCampaignsGeneral = query({
+    args: {
+        action: v.union(v.literal("new"), v.literal("trending")),
+        cursor: v.optional(v.string()),
+        limit: v.optional(v.number()),
+    },
+    handler: async (ctx, args) => {
+        const safeLimit = args.limit && args.limit > 0 ? Math.min(args.limit, 50) : 10;
+
+        let q = ctx.db.query("campaigns").filter((c) => c.eq(c.field("status"), "open"));
+
+        const result = await q.paginate({
+            cursor: args.cursor ?? null,
+            numItems: safeLimit,
+        });
+
+        const campaignIds = result.page.map((c) => c._id);
+
+        const applications = await ctx.db.query("applications").collect();
+
+        const filteredApplications = applications.filter((app) => campaignIds.some((id) => app.campaignId.equals(id)));
+
+        const applyCountMap = {};
+        for (const app of filteredApplications) {
+            const key = app.campaignId.id;
+            applyCountMap[key] = (applyCountMap[key] || 0) + 1;
+        }
+
+        const campaignsWithCount = result.page.map((c) => ({
+            ...c,
+            applyCount: applyCountMap[c._id.id] || 0,
+        }));
+
+        switch (args.action) {
+            case "new": {
+                campaignsWithCount.sort((a, b) => b._creationTime - a._creationTime);
+                break;
+            }
+            case "trending": {
+                campaignsWithCount.sort((a, b) => b.applyCount - a.applyCount);
+                break;
+            }
+        }
+
+        return {
+            data: campaignsWithCount,
+            cursor: result.continueCursor,
+            isDone: result.isDone,
+        };
+    },
+});
