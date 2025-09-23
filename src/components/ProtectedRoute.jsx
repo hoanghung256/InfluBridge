@@ -1,10 +1,15 @@
-import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
+import useConvexUserData from "../hooks/useConvexUserData";
+import { CircularProgress } from "@mui/material";
 
-function ProtectedRoute() {
-    const { token, userData } = useSelector((state) => state.auth);
+function ProtectedRoute({ allowedRoles }) {
+    const user = useConvexUserData();
 
-    if (!token || !userData) {
+    if (user === undefined) {
+        return <CircularProgress />;
+    }
+
+    if (user?.role !== allowedRoles) {
         return <Navigate to="/login" />;
     } else {
         return <Outlet />;
