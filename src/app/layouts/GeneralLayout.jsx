@@ -29,13 +29,21 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import useClerkUserData from "../../hooks/useClerkUserData";
 import { UserButton } from "@clerk/clerk-react";
 import AppIcon from "../../constants/icons";
+import { blue, purple } from "@mui/material/colors";
 
 function GeneralLayout() {
     return (
-        <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", bgcolor: "background.default" }}>
+        <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
             <GeneralNavbar />
             <Toolbar />
-            <Box component="main" sx={{ flex: 1, position: "relative" }}>
+            <Box
+                component="main"
+                sx={(theme) => ({
+                    flex: 1,
+                    position: "relative",
+                    background: `linear-gradient(90deg, ${theme.palette.primary.light}, ${theme.palette.secondary.light})`,
+                })}
+            >
                 <Outlet />
                 <Footer />
                 <ScrollTopFab />

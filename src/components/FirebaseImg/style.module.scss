@@ -1,0 +1,15 @@
+/* ...existing code... */
+.fb-img {
+    transition:
+        transform 0.4s ease,
+        filter 0.4s ease;
+    will-change: transform;
+}
+
+.fb-img-wrapper.hover-zoom:hover .fb-img {
+    transform: scale(1.05);
+}
+/* Tùy chọn thêm nhẹ bóng & sáng hơn khi hover */
+.fb-img-wrapper.hover-zoom:hover .fb-img {
+    filter: brightness(1.03);
+}

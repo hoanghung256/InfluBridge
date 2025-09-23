@@ -15,23 +15,30 @@ import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
 import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 
-/**
- * Simple About Us page.
- */
+// Reusable Paper/Card style
+const cardStyle = {
+    p: 3,
+    borderRadius: 3,
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    gap: 2,
+};
+
 function AboutUsPage() {
     const coreValues = [
         {
-            icon: <RocketLaunchOutlinedIcon color="primary" />,
+            icon: <RocketLaunchOutlinedIcon />,
             title: "Our Mission",
             text: "Empower authentic collaborations between brands and creators through transparent data and streamlined workflows.",
         },
         {
-            icon: <Groups2OutlinedIcon color="primary" />,
+            icon: <Groups2OutlinedIcon />,
             title: "Our Vision",
             text: "Become the most trusted bridge for performance-driven influencer marketing in emerging markets.",
         },
         {
-            icon: <FavoriteBorderOutlinedIcon color="primary" />,
+            icon: <FavoriteBorderOutlinedIcon />,
             title: "Our Values",
             text: "Integrity, measurable impact, user empathy, continuous learning, and long-term partnerships.",
         },
@@ -47,7 +54,7 @@ function AboutUsPage() {
     ];
 
     return (
-        <Box sx={{ bgcolor: "background.default", py: { xs: 6, md: 8 } }}>
+        <Box sx={{ py: { xs: 6, md: 8 } }}>
             <Container maxWidth="lg">
                 {/* Hero */}
                 <Stack spacing={3} textAlign="center" mb={8}>
@@ -64,34 +71,28 @@ function AboutUsPage() {
                 </Stack>
 
                 {/* Core Values */}
-                <Grid container spacing={4} mb={10}>
+                <Grid container spacing={4} mb={10} justifyContent={"space-between"}>
                     {coreValues.map((v) => (
-                        <Grid item xs={12} md={4} key={v.title}>
+                        <Grid item key={v.title}>
                             <Paper
-                                elevation={0}
                                 variant="outlined"
                                 sx={{
-                                    height: "100%",
-                                    p: 3,
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: 2,
-                                    borderRadius: 3,
+                                    ...cardStyle,
+                                    "& svg": { color: "common.white" },
+                                    width: 350,
                                 }}
                             >
                                 <Box
-                                    sx={{
+                                    sx={(theme) => ({
                                         width: 48,
                                         height: 48,
                                         borderRadius: 2,
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
-                                        bgcolor: "primary.main",
-                                        color: "primary.contrastText",
-                                        fontSize: 24,
-                                        "& svg": { color: "common.white" },
-                                    }}
+                                        bgcolor: theme.palette.primary.main,
+                                        color: theme.palette.primary.contrastText,
+                                    })}
                                 >
                                     {v.icon}
                                 </Box>
@@ -108,14 +109,14 @@ function AboutUsPage() {
 
                 {/* Story */}
                 <Grid container spacing={6} mb={10} alignItems="center">
+                    {/* Left column */}
                     <Grid item xs={12} md={6}>
                         <Typography variant="h4" fontWeight={600} gutterBottom>
                             Our Story
                         </Typography>
                         <Typography variant="body1" color="text.secondary" paragraph>
                             We started InfluBridge after seeing brands struggle to vet and coordinate creators across
-                            multiple fragmented tools. Campaign briefs, performance stats, negotiation context, and
-                            content requirements were scattered.
+                            multiple fragmented tools...
                         </Typography>
                         <Typography variant="body1" color="text.secondary" paragraph>
                             We are building a unified operating layer: structured campaign lifecycles, transparent
@@ -123,19 +124,20 @@ function AboutUsPage() {
                             value.
                         </Typography>
                         <Stack direction="row" spacing={1} mt={2}>
-                            <Chip label="Transparency" />
-                            <Chip label="Data-Driven" />
-                            <Chip label="Collaboration" />
+                            {["Transparency", "Data-Driven", "Collaboration"].map((chip) => (
+                                <Chip key={chip} label={chip} />
+                            ))}
                         </Stack>
                     </Grid>
-                    <Grid item xs={12} md={6}>
+
+                    {/* Right column */}
+                    <Grid item xs={12} md={6} display="flex" justifyContent="center">
                         <Card
                             variant="outlined"
                             sx={{
                                 p: 1,
                                 borderRadius: 4,
                                 backdropFilter: "blur(4px)",
-                                bgcolor: "background.paper",
                             }}
                         >
                             <CardContent>
@@ -143,11 +145,15 @@ function AboutUsPage() {
                                     Platform Highlights
                                 </Typography>
                                 <Stack spacing={1.5}>
-                                    <FeatureLine text="End-to-end campaign lifecycle management" />
-                                    <FeatureLine text="Structured budget & timeline validation" />
-                                    <FeatureLine text="Multi-platform targeting & analytics" />
-                                    <FeatureLine text="Category tagging & discovery" />
-                                    <FeatureLine text="Secure data and scalable architecture" />
+                                    {[
+                                        "End-to-end campaign lifecycle management",
+                                        "Structured budget & timeline validation",
+                                        "Multi-platform targeting & analytics",
+                                        "Category tagging & discovery",
+                                        "Secure data and scalable architecture",
+                                    ].map((f) => (
+                                        <FeatureLine key={f} text={f} />
+                                    ))}
                                 </Stack>
                             </CardContent>
                         </Card>
@@ -159,38 +165,26 @@ function AboutUsPage() {
                     <Typography variant="h4" fontWeight={600} textAlign="center" mb={4}>
                         Team
                     </Typography>
-                    <Grid container spacing={4}>
+                    <Grid container columnSpacing={10} rowSpacing={6} justifyContent="center">
                         {team.map((m) => (
-                            <Grid item xs={12} sm={6} md={3} key={m.name}>
-                                <Paper
-                                    variant="outlined"
-                                    sx={{
-                                        p: 3,
-                                        textAlign: "center",
-                                        borderRadius: 3,
-                                        height: "100%",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        gap: 1.5,
-                                    }}
-                                >
+                            <Grid item xs={12} md={6} lg={4} key={m.name}>
+                                <Paper variant="outlined" sx={{ ...cardStyle, width: 300 }}>
                                     <Avatar
-                                        sx={{
+                                        sx={(theme) => ({
                                             mx: "auto",
                                             width: 72,
                                             height: 72,
-                                            fontSize: 24,
+                                            bgcolor: theme.palette.primary.main,
+                                            color: theme.palette.primary.contrastText,
                                             fontWeight: 600,
-                                            bgcolor: "primary.main",
-                                            color: "primary.contrastText",
-                                        }}
+                                        })}
                                     >
                                         {m.initials}
                                     </Avatar>
-                                    <Typography variant="subtitle1" fontWeight={600}>
+                                    <Typography variant="subtitle1" fontWeight={600} textAlign="center">
                                         {m.name}
                                     </Typography>
-                                    <Typography variant="caption" color="text.secondary" sx={{ letterSpacing: 0.5 }}>
+                                    <Typography variant="caption" color="text.secondary" textAlign="center">
                                         {m.role}
                                     </Typography>
                                 </Paper>
@@ -204,7 +198,7 @@ function AboutUsPage() {
                 {/* Footer Callout */}
                 <Box textAlign="center" mt={8}>
                     <Typography variant="h5" fontWeight={600} gutterBottom>
-                        Let’s build better creator partnerships.
+                        Let's build better creator partnerships.
                     </Typography>
                     <Typography variant="body2" color="text.secondary" maxWidth={640} mx="auto">
                         Join us as we refine tools that bring clarity and performance to brand–influencer collaboration.
@@ -219,14 +213,14 @@ function FeatureLine({ text }) {
     return (
         <Stack direction="row" spacing={1} alignItems="flex-start">
             <Box
-                sx={{
+                sx={(theme) => ({
                     width: 8,
                     height: 8,
                     borderRadius: "50%",
-                    bgcolor: "primary.main",
+                    bgcolor: theme.palette.primary.main,
                     mt: "7px",
                     flexShrink: 0,
-                }}
+                })}
             />
             <Typography variant="body2" color="text.secondary">
                 {text}
