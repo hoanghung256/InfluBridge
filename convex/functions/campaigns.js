@@ -222,3 +222,28 @@ export const getCampaignsGeneral = query({
         };
     },
 });
+
+/**
+ * getCampaignById
+ * Returns a single campaign by its _id with applyCount.
+ */
+export const getCampaignById = query({
+    args: {
+        campaignId: v.id("campaigns"),
+    },
+    handler: async (ctx, { campaignId }) => {
+        const campaign = await ctx.db.get(campaignId);
+        if (!campaign) return null;
+
+        // Count applications for this campaign
+        const apps = await ctx.db
+            .query("applications")
+            .filter((q) => q.eq(q.field("campaignId"), campaignId))
+            .collect();
+
+        return {
+            ...campaign,
+            applyCount: apps.length,
+        };
+    },
+});

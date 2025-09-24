@@ -4,12 +4,12 @@ import { getFileDownloadURL } from "../../service/firebaseStorage";
 import "./style.module.scss";
 
 /**
- * FireBaseImg
+ * FirebaseImg
  * Props:
  *  - fileName: path stored in Firebase
  *  - enableHoverZoom: bật tắt hiệu ứng zoom (default true)
  */
-const FireBaseImg = ({
+const FirebaseImg = ({
     fileName,
     alt = "",
     inputClassName,
@@ -67,4 +67,4 @@ const FireBaseImg = ({
     );
 };
 
-export default FireBaseImg;
+export default FirebaseImg;

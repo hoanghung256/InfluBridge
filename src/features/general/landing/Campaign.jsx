@@ -1,9 +1,12 @@
-import FireBaseImg from "../../../components/FirebaseImg/FirebaseImg";
+import { useNavigate } from "react-router-dom";
+import FirebaseImg from "../../../components/FirebaseImg/FirebaseImg";
 import { icons } from "../../../constants/icons";
 
 import { Box, Card, CardContent, CardMedia, Typography, Stack } from "@mui/material";
 
 function Campaign({ data }) {
+    const navigate = useNavigate();
+
     return (
         <Card
             sx={{
@@ -12,9 +15,10 @@ function Campaign({ data }) {
                 width: "20rem",
                 cursor: "pointer",
             }}
+            onClick={() => navigate(`/campaign/${data._id}`)}
         >
             <CardMedia>
-                <FireBaseImg
+                <FirebaseImg
                     fileName={data.bannerUrl}
                     alt={data.title}
                     style={{ width: 320, height: 300, objectFit: "cover" }}
