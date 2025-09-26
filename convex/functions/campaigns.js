@@ -247,3 +247,42 @@ export const getCampaignById = query({
         };
     },
 });
+
+export const applyIntoCampaign = mutation({
+    args: {
+        campaignId: v.id("campaigns"),
+        influencerId: v.id("influencers"),
+    },
+    handler: async (ctx, { campaignId, influencerId }) => {
+        // 1. Campaign existence
+        const campaign = await ctx.db.get(campaignId);
+        if (!campaign) {
+            throw new Error("Campaign not found.");
+        }
+        if (campaign.status !== "open") {
+            throw new Error("Campaign is not open for applications.");
+        }
+
+        // 2. Influencer existence
+        const influencer = await ctx.db.get(influencerId);
+        if (!influencer) {
+            throw new Error("Influencer not found.");
+        }
+        // 3. Check if already applied
+        const existingApps = await ctx.db
+            .query("campaignApplications")
+            .filter((q) => q.eq(q.field("campaignId"), campaignId))
+            .filter((q) => q.eq(q.field("influencerId"), influencerId))
+            .collect();
+        if (existingApps.length > 0) {
+            throw new Error("You have already applied to this campaign.");
+        }
+        // 4. Create application
+        const appId = await ctx.db.insert("campaignApplications", {
+            campaignId,
+            influencerId,
+            status: "applied",
+        });
+        return { applicationId: appId };
+    },
+});

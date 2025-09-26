@@ -3,7 +3,7 @@ import { convexQueryOneTime } from "../../../service/convexClient";
 import { api } from "../../../../convex/_generated/api";
 import Campaign from "./Campaign";
 
-import { Box, Grid, Typography, Button, CircularProgress } from "@mui/material";
+import { Box, Grid, Button, CircularProgress } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 function CampaignList({ action = "new" }) {
@@ -35,7 +35,7 @@ function CampaignList({ action = "new" }) {
         <>
             <Grid container spacing={3} sx={{ px: 6 }}>
                 {campaigns?.map((c) => (
-                    <Grid item xs={12} sm={6} md={4} key={c._id}>
+                    <Grid item key={c._id}>
                         <Campaign data={c} />
                     </Grid>
                 ))}
