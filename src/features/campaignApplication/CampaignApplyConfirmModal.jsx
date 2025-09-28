@@ -13,8 +13,11 @@ import {
     Typography,
     Stack,
 } from "@mui/material";
+import { convexMutation } from "../../service/convexClient";
+import { api } from "../../../convex/_generated/api";
+import toast from "react-hot-toast";
 
-function CampaignApplyConfirmModal({ open, campaign, onClose = () => {} }) {
+function CampaignApplyConfirmModal({ open, influencerId, campaign, onClose = () => {}, refresh = () => {} }) {
     const TERMS = useMemo(
         () => [
             "Vui lòng gửi bài đăng cuối cùng của bạn trong thời gian quy định, nếu không bạn sẽ được yêu cầu thanh toán cho sản phẩm và phí vận chuyển vv",
@@ -34,11 +37,21 @@ function CampaignApplyConfirmModal({ open, campaign, onClose = () => {} }) {
         setChecked((arr) => arr.map((v, i) => (i === idx ? !v : v)));
     };
 
-    const handleConfirm = () => {
-        if (!allChecked) return;
-        // Confirm logic
-        setChecked(Array(TERMS.length).fill(false));
-        onClose();
+    const handleConfirm = async () => {
+        if (!allChecked || !campaign || !influencerId) return;
+        try {
+            const res = await convexMutation(api.functions.campaignApplications.applyIntoCampaign, {
+                campaignId: campaign._id,
+                influencerId: influencerId,
+            });
+            toast.success("Ứng tuyển thành công!");
+            setChecked(Array(TERMS.length).fill(false));
+            refresh();
+            onClose();
+        } catch (error) {
+            console.error("Error applying to campaign:", error);
+            toast.error(`Lỗi khi ứng tuyển`);
+        }
     };
 
     const handleClose = () => {
@@ -95,7 +108,7 @@ function CampaignApplyConfirmModal({ open, campaign, onClose = () => {} }) {
                     Hủy
                 </Button>
                 <Button onClick={handleConfirm} variant="contained" disabled={!allChecked}>
-                    Xác nhận
+                    Xác nhận tham gia
                 </Button>
             </DialogActions>
         </Dialog>

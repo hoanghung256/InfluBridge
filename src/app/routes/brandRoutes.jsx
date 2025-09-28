@@ -1,7 +1,9 @@
+import CampaignAppliesPage from "../../features/campaignApplication/CampaignAppliesPage";
 import CampaignPage from "../../features/manageCampaign/pages/CampaignPage";
 import CreateCampaign from "../../features/manageCampaign/pages/CreateCampaign";
 
 export const brandRoutes = [
     { path: "/campaigns", element: <CampaignPage /> },
     { path: "/campaigns/create", element: <CreateCampaign /> },
+    { path: "/campaigns/application/:campaignId", element: <CampaignAppliesPage /> },
 ];

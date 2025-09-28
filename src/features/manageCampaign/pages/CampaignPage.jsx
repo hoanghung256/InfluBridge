@@ -218,12 +218,10 @@ function CampaignPage() {
                                         variant="outlined"
                                         endIcon={<OpenInNewIcon fontSize="inherit" />}
                                         onClick={() => {
-                                            // Placeholder: navigate to a detail page when implemented
-                                            // e.g. navigate(`/campaigns/${c._id}`)
-                                            alert(`Open campaign detail: ${c._id}`);
+                                            navigate(`/campaigns/application/${c._id}`);
                                         }}
                                     >
-                                        Detail
+                                        Chi tiết
                                     </Button>
                                 </Stack>
                             </Paper>

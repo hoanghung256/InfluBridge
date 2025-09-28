@@ -13,6 +13,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as functions_campaignApplications from "../functions/campaignApplications.js";
 import type * as functions_campaigns from "../functions/campaigns.js";
 import type * as functions_categories from "../functions/categories.js";
 import type * as functions_users from "../functions/users.js";
@@ -26,6 +27,7 @@ import type * as functions_users from "../functions/users.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  "functions/campaignApplications": typeof functions_campaignApplications;
   "functions/campaigns": typeof functions_campaigns;
   "functions/categories": typeof functions_categories;
   "functions/users": typeof functions_users;

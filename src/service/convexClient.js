@@ -27,3 +27,8 @@ export async function convexMutation(func, args) {
 export function convexQueryRealtime(func, args) {
     return useQuery(func, args);
 }
+
+export function convexAction(func, args) {
+    const c = getConvexClient();
+    return c.action(func, args);
+}

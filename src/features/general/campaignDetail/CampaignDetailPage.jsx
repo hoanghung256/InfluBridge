@@ -15,6 +15,8 @@ function CampaignDetailPage() {
 
     const [campaign, setCampaign] = useState(null);
     const [isShowApplyConfirm, setIsShowApplyConfirm] = useState(false);
+    // Track if the user has already applied (influencer only)
+    const [isApplied, setIsApplied] = useState(false);
 
     useEffect(() => {
         if (campaignId) {
@@ -22,10 +24,23 @@ function CampaignDetailPage() {
         }
     }, []);
 
+    useEffect(() => {
+        if (campaignId && user?.role === USER_ROLES.INFLUENCER && user?.detail?._id) {
+            getIsApplied();
+        }
+    }, [user]);
+
     const getCampaignDetail = async () => {
         const res = await convexQueryOneTime(api.functions.campaigns.getCampaignById, { campaignId });
         setCampaign(res);
-        console.log("Campaign Detail:", res);
+    };
+
+    const getIsApplied = async () => {
+        const res = await convexQueryOneTime(api.functions.campaignApplications.getApplicationsGeneral, {
+            campaignId,
+            influencerId: user.detail._id,
+        });
+        setIsApplied(res.length > 0);
     };
 
     if (!campaign) {
@@ -49,11 +64,15 @@ function CampaignDetailPage() {
 
     return (
         <>
-            <CampaignApplyConfirmModal
-                open={isShowApplyConfirm}
-                campaign={campaign}
-                onClose={() => setIsShowApplyConfirm(false)}
-            />
+            {user?.role === USER_ROLES.INFLUENCER && (
+                <CampaignApplyConfirmModal
+                    open={isShowApplyConfirm}
+                    influencerId={user?.detail?._id}
+                    campaign={campaign}
+                    refresh={getCampaignDetail}
+                    onClose={() => setIsShowApplyConfirm(false)}
+                />
+            )}
             <Box sx={{ py: { xs: 3, md: 5 } }}>
                 <Container maxWidth="lg">
                     <Grid container spacing={3}>
@@ -188,9 +207,11 @@ function CampaignDetailPage() {
                                     >
                                         {campaign.status !== "open"
                                             ? "Đã đóng"
-                                            : isApplyOpen
-                                              ? "Ứng tuyển"
-                                              : "Ngoài thời gian ứng tuyển"}
+                                            : isApplied
+                                              ? "Đã ứng tuyển"
+                                              : isApplyOpen
+                                                ? "Ứng tuyển"
+                                                : "Ngoài thời gian ứng tuyển"}
                                     </Button>
                                 )}
                             </Paper>

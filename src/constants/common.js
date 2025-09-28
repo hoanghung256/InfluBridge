@@ -26,3 +26,10 @@ export const USER_ROLES = {
     INFLUENCER: "influencer",
     ADMIN: "admin",
 };
+
+export const CAMPAIGN_STATUSES = {
+    APPLIED: "applied",
+    INVITED: "invited",
+    ACCEPTED: "accepted",
+    REJECTED: "rejected",
+};
