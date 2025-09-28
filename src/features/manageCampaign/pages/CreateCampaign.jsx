@@ -218,7 +218,7 @@ function CreateCampaign() {
     };
 
     return (
-        <Box sx={{ maxWidth: 900, mx: "auto", mt: 4, px: 2, pb: 8 }}>
+        <Box sx={{  }}>
             <Paper sx={{ p: 4 }}>
                 <Typography variant="h5" fontWeight={600} mb={2}>
                     Create Campaign
@@ -516,7 +516,7 @@ function CreateCampaign() {
                         {error && <Alert severity="error">{error}</Alert>}
                         {success && <Alert severity="success">{success}</Alert>}
 
-                        <Box display="flex" gap={2}>
+                        <Box display="flex" justifyContent={"end"} gap={2}>
                             <Button type="submit" variant="contained" disabled={submitting || uploading}>
                                 {submitting ? "Creating..." : "Create Campaign"}
                             </Button>

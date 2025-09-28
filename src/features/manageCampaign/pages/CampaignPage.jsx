@@ -79,8 +79,8 @@ function CampaignPage() {
 
     if (!brandId) {
         return (
-            <Box sx={{ maxWidth: 800, mx: "auto", mt: 6, px: 2 }}>
-                <Paper sx={{ p: 4 }}>
+            <Box>
+                <Paper>
                     <Typography variant="h6">No brand context.</Typography>
                     <Typography variant="body2" color="text.secondary">
                         Brand ID not found on current user.
@@ -91,7 +91,7 @@ function CampaignPage() {
     }
 
     return (
-        <Box sx={{ maxWidth: 1100, mx: "auto", mt: 4, px: 2, pb: 8 }}>
+        <Box>
             <Paper sx={{ p: 3 }}>
                 <Stack direction="row" alignItems="center" spacing={2} mb={2}>
                     <Typography variant="h5" fontWeight={600} flexGrow={1}>
