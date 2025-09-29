@@ -1,17 +1,26 @@
 {
-  "hosting": {
-    "public": "dist",
-    "site": "influbridge",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
+    "hosting": [
+        {
+            "public": "dist-production",
+            "site": "influbridge",
+            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
+        },
+        {
+            "public": "dist-testing",
+            "site": "influbridge",
+            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
+        }
     ]
-  }
 }
