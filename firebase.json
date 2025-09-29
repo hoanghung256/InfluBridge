@@ -13,7 +13,7 @@
         },
         {
             "public": "dist-testing",
-            "site": "influbridge",
+            "site": "influbridge-testing",
             "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
             "rewrites": [
                 {
