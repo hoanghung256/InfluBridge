@@ -35,6 +35,7 @@ jobs:
                     echo "VITE_CONVEX_URL=${{ secrets.CONVEX_URL }}" >> .env.production
                     echo "VITE_FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}" >> .env.production
                     echo "NODE_ENV=production" >> .env.production
+                  fi
 
             - name: Build project for ${{ matrix.site }} site
               run: |
