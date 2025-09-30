@@ -87,7 +87,7 @@ function FamousInfluencerList() {
                                           overflow: "hidden",
                                           borderRadius: 2,
                                           height: "100%",
-                                          width: "20rem",
+                                          width: "17rem",
                                           transition: "transform .2s ease, box-shadow .2s ease",
                                           cursor: "pointer",
                                           "&:hover": { transform: "translateY(-2px)", boxShadow: 3 },
@@ -125,15 +125,15 @@ function FamousInfluencerList() {
                                               {avatarUrl ? (
                                                   <FireBaseImg
                                                       fileName={avatarUrl}
-                                                      width={150}
-                                                      height={150}
+                                                      width={200}
+                                                      height={200}
                                                       inputClassName="rounded-circle"
                                                   />
                                               ) : (
                                                   <Avatar
                                                       sx={{
-                                                          width: 150,
-                                                          height: 150,
+                                                          width: 200,
+                                                          height: 200,
                                                           borderRadius: "50%",
                                                           overflow: "hidden",
                                                       }}
