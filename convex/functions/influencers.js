@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { mutation } from "../_generated/server";
+import { mutation, query } from "../_generated/server";
 
 export const updateProfile = mutation({
     args: {
@@ -43,5 +43,21 @@ export const updateProfile = mutation({
             ...user,
             detail: { ...influencer },
         };
+    },
+});
+
+export const getFamousInfluencers = query({
+    args: {
+        limit: v.optional(v.number()),
+    },
+    handler: async (ctx, args) => {
+        const limit = args.limit || 4;
+        const influencers = await ctx.db.query("influencers").take(limit);
+        const users = await Promise.all(influencers.map((inf) => ctx.db.get(inf.userId)));
+
+        return influencers.map((inf, idx) => ({
+            ...users[idx],
+            detail: inf,
+        }));
     },
 });

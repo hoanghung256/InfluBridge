@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import LandingBanner from "../../../assets/images/landing-banner.png";
 import CampaignList from "./CampaignList";
+import FamousInfluencerList from "./FamousInfluencerList";
 
 function LandingPage() {
     return (
@@ -13,11 +14,18 @@ function LandingPage() {
                 <CampaignList action="new" />
             </Box>
 
-            <Box sx={{ px: 4 }}>
+            <Box sx={{ px: 4, py: 6 }}>
                 <Typography variant="h5" fontWeight={600} mb={4}>
                     ✨ Chiến dịch nổi bật
                 </Typography>
                 <CampaignList action="trending" />
+            </Box>
+
+            <Box sx={{ px: 4, py: 6 }}>
+                <Typography variant="h5" fontWeight={600} mb={4}>
+                    ✨ Influencer nổi bật
+                </Typography>
+                <FamousInfluencerList />
             </Box>
         </Box>
     );
