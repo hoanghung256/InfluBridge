@@ -24,6 +24,8 @@ export default defineSchema({
     influencers: defineTable({
         userId: v.id("users"),
         bio: v.optional(v.string()),
+        avatarUrl: v.optional(v.string()),
+        socialChannel: v.optional(v.array(v.object({ platform: v.string(), url: v.string() }))),
         categories: v.array(v.id("categories")),
         priceMin: v.number(),
         priceMax: v.number(),

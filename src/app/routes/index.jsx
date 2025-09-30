@@ -7,6 +7,7 @@ import GeneralLayout from "../layouts/GeneralLayout";
 import { authRoutes } from "./authRoutes";
 import { brandRoutes } from "./brandRoutes";
 import { generalRoutes } from "./generalRoutes";
+import { influencerRoutes } from "./influencerRoutes";
 
 export const routes = [
     { element: <AuthLayout />, children: authRoutes },
@@ -14,5 +15,9 @@ export const routes = [
     {
         element: <ProtectedRoute allowedRoles={USER_ROLES.BRAND} children={<BrandLayout />} />,
         children: brandRoutes,
+    },
+    {
+        element: <ProtectedRoute allowedRoles={USER_ROLES.INFLUENCER} children={<GeneralLayout />} />,
+        children: influencerRoutes,
     },
 ];

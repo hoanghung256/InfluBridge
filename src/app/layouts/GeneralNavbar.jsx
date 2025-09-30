@@ -14,23 +14,67 @@ import {
     Divider,
     useMediaQuery,
     useTheme,
+    Avatar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AppIcon from "../../constants/icons";
 import useClerkUserData from "../../hooks/useClerkUserData";
-import { UserButton } from "@clerk/clerk-react";
+import { useClerk, UserButton } from "@clerk/clerk-react";
+import FirebaseImg from "../../components/FirebaseImg/FirebaseImg";
+import { initialsOf } from "../../utils/helper";
+import useConvexUserData from "../../hooks/useConvexUserData";
+import { USER_ROLES } from "../../constants/common";
 
 function GeneralNavbar() {
     const theme = useTheme();
     const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
     const [open, setOpen] = useState(false);
     const { user } = useClerkUserData();
+    const convexUser = useConvexUserData();
+    const { signOut } = useClerk();
 
     const navItems = [
         { label: "Campaigns", to: "/campaigns" },
         { label: "Influencers", to: "/" },
         { label: "About us", to: "/about-us" },
     ];
+
+    const renderButtons = () => {
+        if (isMdUp && convexUser?.role === USER_ROLES.INFLUENCER) {
+            return (
+                <>
+                    <Button component={RouterLink} to="/influencer/my-profile" variant="text" size="small">
+                        {convexUser?.detail?.avatarUrl ? (
+                            <FirebaseImg fileName={convexUser.detail.avatarUrl} width={30} height={30} inputClassName="rounded-circle" />
+                        ) : (
+                            <Avatar>{initialsOf(convexUser.fullname)}</Avatar>
+                        )}
+                    </Button>
+                    <Button variant="text" size="small" onClick={() => signOut({ redirectUrl: "/signout-callback" })}>
+                        Sign Out
+                    </Button>
+                </>
+            );
+        }
+
+        if (convexUser?.role === USER_ROLES.BRAND) {
+            return <UserButton afterSignOutUrl="/signout-callback" />;
+        }
+
+        if (!user || !convexUser) {
+            return (
+                <>
+                    <Button component={RouterLink} to="/login" variant="text" size="small">
+                        Sign In
+                    </Button>
+                    <Button component={RouterLink} to="/sign-up" variant="contained" size="small">
+                        Get Started
+                    </Button>
+                </>
+            );
+        }
+        return null;
+    };
 
     const drawer = (
         <Box sx={{ width: 260 }} role="presentation" onClick={() => setOpen(false)}>
@@ -47,20 +91,7 @@ function GeneralNavbar() {
                 ))}
             </List>
             <Divider />
-            <Box sx={{ p: 2, display: "flex", gap: 1 }}>
-                {user ? (
-                    <UserButton afterSignOutUrl="/signout-callback" />
-                ) : (
-                    <>
-                        <Button fullWidth variant="contained" size="small" href="/login">
-                            Sign In
-                        </Button>
-                        <Button fullWidth variant="outlined" size="small" href="/sign-up">
-                            Get Started
-                        </Button>
-                    </>
-                )}
-            </Box>
+            <Box sx={{ p: 2, display: "flex", gap: 1 }}>{renderButtons()}</Box>
         </Box>
     );
 
@@ -102,20 +133,7 @@ function GeneralNavbar() {
 
                     <Box sx={{ flexGrow: 1 }} />
 
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                        {isMdUp && user ? (
-                            <UserButton afterSignOutUrl="/signout-callback" />
-                        ) : (
-                            <>
-                                <Button component={RouterLink} to="/login" variant="text" size="small">
-                                    Sign In
-                                </Button>
-                                <Button component={RouterLink} to="/sign-up" variant="contained" size="small">
-                                    Get Started
-                                </Button>
-                            </>
-                        )}
-                    </Box>
+                    <Box sx={{ display: "flex", gap: 1 }}>{renderButtons()}</Box>
                 </Toolbar>
             </AppBar>
 

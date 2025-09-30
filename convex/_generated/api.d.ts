@@ -16,6 +16,7 @@ import type {
 import type * as functions_campaignApplications from "../functions/campaignApplications.js";
 import type * as functions_campaigns from "../functions/campaigns.js";
 import type * as functions_categories from "../functions/categories.js";
+import type * as functions_influencers from "../functions/influencers.js";
 import type * as functions_users from "../functions/users.js";
 
 /**
@@ -30,6 +31,7 @@ declare const fullApi: ApiFromModules<{
   "functions/campaignApplications": typeof functions_campaignApplications;
   "functions/campaigns": typeof functions_campaigns;
   "functions/categories": typeof functions_categories;
+  "functions/influencers": typeof functions_influencers;
   "functions/users": typeof functions_users;
 }>;
 export declare const api: FilterApi<

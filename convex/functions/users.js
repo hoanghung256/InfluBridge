@@ -81,7 +81,7 @@ export const createBrand = mutation({
             phone: args.phone,
             isActive: true,
             isVerified: true,
-            userDetail: { ...brand },
+            detail: { ...brand },
         };
     },
 });
@@ -97,6 +97,7 @@ export const createInfluencer = mutation({
         bio: v.optional(v.string()),
         priceMin: v.number(),
         priceMax: v.number(),
+        avatarUrl: v.optional(v.string()),
     },
     handler: async (ctx, args) => {
         const userId = await ctx.db.insert("users", {
@@ -133,7 +134,7 @@ export const createInfluencer = mutation({
             phone: args.phone,
             isActive: true,
             isVerified: true,
-            userDetail: { ...influencer },
+            detail: { ...influencer },
         };
     },
 });
