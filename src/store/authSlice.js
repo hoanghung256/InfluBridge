@@ -12,7 +12,7 @@ const authSlice = createSlice({
         setUserData(state, value) {
             state.userData = value.payload;
             if (value.payload === null) {
-                localStorage.removeItem("token");
+                localStorage.removeItem("user");
             } else {
                 localStorage.setItem("user", JSON.stringify(value.payload));
             }

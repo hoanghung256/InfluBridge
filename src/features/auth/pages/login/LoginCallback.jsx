@@ -43,7 +43,13 @@ function LoginCallback() {
         bio: "",
         priceMin: "",
         priceMax: "",
+        avatarUrl: "",
     });
+
+    const selectableCategories = useMemo(() => {
+        if (!categoryOptions || categoryOptions.length === 0) return [];
+        return categoryOptions.filter((cat) => !form.categories.find((c) => c._id === cat._id));
+    }, [categoryOptions, form.categories]);
 
     const [error, setError] = useState("");
     const navigate = useNavigate();
@@ -75,6 +81,7 @@ function LoginCallback() {
             if (fetchedUser.role === "brand") navigate("/campaigns");
             if (fetchedUser.role === "influencer") navigate("/");
         }
+        console.log(user);
     }, [user, fetchedUser, navigate]);
 
     const checkIfUserExists = async (clerkId) => {
@@ -146,6 +153,7 @@ function LoginCallback() {
                 payload.bio = form.bio || "";
                 payload.priceMin = form.priceMin ? Number(form.priceMin) : 0;
                 payload.priceMax = form.priceMax ? Number(form.priceMax) : 0;
+                payload.avatarUrl = user.imageUrl || "";
                 await convexMutation(api.functions.users.createInfluencer, payload);
             }
             await checkIfUserExists(user.id);
@@ -274,15 +282,7 @@ function LoginCallback() {
                             required
                             fullWidth
                         />
-                        <TextField
-                            label="Email"
-                            name="email"
-                            value={form.email}
-                            onChange={handleChange}
-                            required
-                            disabled
-                            fullWidth
-                        />
+                        <TextField label="Email" name="email" value={form.email} required fullWidth />
                         <TextField
                             select
                             label="Vai trò"
@@ -305,7 +305,7 @@ function LoginCallback() {
                         />
                         <Autocomplete
                             multiple
-                            options={categoryOptions}
+                            options={selectableCategories}
                             loading={catLoading}
                             value={form.categories}
                             onChange={handleCategoriesChange}

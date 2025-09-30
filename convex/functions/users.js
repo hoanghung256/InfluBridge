@@ -123,6 +123,7 @@ export const createInfluencer = mutation({
             categories: args.categories,
             priceMin: args.priceMin,
             priceMax: args.priceMax,
+            avatarUrl: args.avatarUrl || "",
         });
 
         return {

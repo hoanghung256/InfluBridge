@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import {
     AppBar,
     Toolbar,
@@ -31,7 +31,7 @@ function GeneralNavbar() {
     const [open, setOpen] = useState(false);
     const { user } = useClerkUserData();
     const convexUser = useConvexUserData();
-    const { signOut } = useClerk();
+    const navigate = useNavigate();
 
     const navItems = [
         { label: "Campaigns", to: "/campaigns" },
@@ -45,12 +45,18 @@ function GeneralNavbar() {
                 <>
                     <Button component={RouterLink} to="/influencer/my-profile" variant="text" size="small">
                         {convexUser?.detail?.avatarUrl ? (
-                            <FirebaseImg fileName={convexUser.detail.avatarUrl} width={30} height={30} inputClassName="rounded-circle" />
+                            <FirebaseImg
+                                fileName={convexUser.detail.avatarUrl}
+                                width={30}
+                                height={30}
+                                inputClassName="rounded-circle"
+                            />
                         ) : (
                             <Avatar>{initialsOf(convexUser.fullname)}</Avatar>
                         )}
                     </Button>
-                    <Button variant="text" size="small" onClick={() => signOut({ redirectUrl: "/signout-callback" })}>
+                    {/* <Button variant="text" size="small" onClick={() => signOut({ redirectUrl: "/signout-callback" })}> */}
+                    <Button variant="text" size="small" onClick={() => navigate("/signout-callback")}>
                         Sign Out
                     </Button>
                 </>

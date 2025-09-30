@@ -33,9 +33,7 @@ const FirebaseImg = ({
         } catch (error) {
             // setClassName((prev) => prev + " d-none");
             console.error("Error fetching image:", error);
-            setImgSrc(
-                `https://via.placeholder.com/${width === "auto" ? 150 : width}x${height === "auto" ? 150 : height}?text=H%C3%ACnh`,
-            );
+            setImgSrc(fileName);
         }
     };
 

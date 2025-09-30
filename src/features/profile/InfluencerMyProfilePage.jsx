@@ -333,9 +333,6 @@ function InfluencerMyProfilePage() {
                                 onChange={(_, val) => {
                                     setTouched(true);
                                     setForm((f) => ({ ...f, categories: val }));
-                                    setSelectableCategories((prev) =>
-                                        val.length > prev.length ? [...prev, ...val] : prev,
-                                    );
                                 }}
                                 renderTags={(value, getTagProps) =>
                                     value.map((option, index) => (
