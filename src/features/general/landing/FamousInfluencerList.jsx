@@ -5,8 +5,17 @@ import { convexQueryOneTime } from "../../../service/convexClient";
 import useCategories from "../../../hooks/useCategories";
 import FireBaseImg from "../../../components/FirebaseImg/FirebaseImg";
 import { useNavigate } from "react-router-dom";
+import useConvexUserData from "../../../hooks/useConvexUserData";
+import { keyframes } from "@emotion/react";
+
+// Animated gradient border
+const spin = keyframes`
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+`;
 
 function FamousInfluencerList() {
+    const user = useConvexUserData();
     const [influencers, setInfluencers] = useState([]);
     const [loading, setLoading] = useState(false);
     const { categories: allCategories = [] } = useCategories();
@@ -66,19 +75,49 @@ function FamousInfluencerList() {
                               inf.avatarUrl || inf.influencerDetail?.avatarUrl || inf.detail?.avatarUrl || "";
                           const catIds = inf.categories || inf.detail?.categories || inf.influencer?.categories || [];
                           const catNames = (catIds || []).map((id) => categoryMap[id] || "Danh mục");
+                          const infEmail = inf.email || inf.influencerDetail?.email || "";
+                          const isSelf = (user?.email || "").toLowerCase() === (infEmail || "").toLowerCase();
 
                           return (
                               <Grid item xs={12} sm={6} md={3} key={inf._id}>
                                   <Card
                                       onClick={() => alert("Chức năng đang được phát triển")}
-                                      variant="outlined"
                                       sx={{
+                                          position: "relative",
+                                          overflow: "hidden",
                                           borderRadius: 2,
                                           height: "100%",
                                           width: "20rem",
                                           transition: "transform .2s ease, box-shadow .2s ease",
-                                          "&:hover": { transform: "translateY(-2px)", boxShadow: 3 },
                                           cursor: "pointer",
+                                          "&:hover": { transform: "translateY(-2px)", boxShadow: 3 },
+                                          ...(isSelf && {
+                                              borderColor: "transparent",
+                                              boxShadow: 6,
+                                              // Animated gradient ring using a masked ::before layer
+                                              "&::before": {
+                                                  content: '""',
+                                                  position: "absolute",
+                                                  inset: 0,
+                                                  borderRadius: 2,
+                                                  padding: "3px",
+                                                  background:
+                                                      "linear-gradient(270deg, #7C4DFF, #03A9F4, #00E676, #FFEB3B, #FF5722, #7C4DFF)",
+                                                  backgroundSize: "400% 400%",
+                                                  WebkitMask:
+                                                      "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
+                                                  WebkitMaskComposite: "xor",
+                                                  maskComposite: "exclude",
+                                                  animation: `${spin} 6s ease infinite`,
+                                              },
+
+                                              // Ensure content is above the ::before layer
+                                              "& .MuiCardContent-root": {
+                                                  position: "relative",
+                                                  zIndex: 1,
+                                                  bgcolor: "transparent",
+                                              },
+                                          }),
                                       }}
                                   >
                                       <CardContent>
