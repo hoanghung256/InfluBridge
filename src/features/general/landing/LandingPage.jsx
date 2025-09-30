@@ -8,24 +8,24 @@ function LandingPage() {
         <Box>
             <img width="100%" height="50%" src={LandingBanner} alt="Landing Banner" />
             <Box sx={{ px: 4, py: 6 }}>
-                <Typography variant="h5" fontWeight={600} mb={4}>
-                    ✨ Chiến dịch mới
+                <Typography variant="h5" fontWeight={600} mb={4} textAlign={"center"}>
+                    Influencer nổi bật
+                </Typography>
+                <FamousInfluencerList />
+            </Box>
+
+            <Box sx={{ px: 4, py: 6 }}>
+                <Typography variant="h5" fontWeight={600} mb={4} textAlign={"center"}>
+                    Chiến dịch mới
                 </Typography>
                 <CampaignList action="new" />
             </Box>
 
             <Box sx={{ px: 4, py: 6 }}>
-                <Typography variant="h5" fontWeight={600} mb={4}>
-                    ✨ Chiến dịch nổi bật
+                <Typography variant="h5" fontWeight={600} mb={4} textAlign={"center"}>
+                    Chiến dịch nổi bật
                 </Typography>
                 <CampaignList action="trending" />
-            </Box>
-
-            <Box sx={{ px: 4, py: 6 }}>
-                <Typography variant="h5" fontWeight={600} mb={4}>
-                    ✨ Influencer nổi bật
-                </Typography>
-                <FamousInfluencerList />
             </Box>
         </Box>
     );
