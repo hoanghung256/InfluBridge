@@ -69,7 +69,10 @@ function CampaignDetailPage() {
                     open={isShowApplyConfirm}
                     influencerId={user?.detail?._id}
                     campaign={campaign}
-                    refresh={getCampaignDetail}
+                    refresh={() => {
+                        getCampaignDetail();
+                        getIsApplied();
+                    }}
                     onClose={() => setIsShowApplyConfirm(false)}
                 />
             )}
@@ -202,7 +205,7 @@ function CampaignDetailPage() {
                                         variant="contained"
                                         color="primary"
                                         // disabled={!isApplyOpen || campaign.status !== "open"}
-                                        disabled={isApplied ||campaign.status !== "open"}
+                                        disabled={isApplied || campaign.status !== "open"}
                                         sx={{ mt: 1 }}
                                         onClick={() => setIsShowApplyConfirm(true)}
                                     >
