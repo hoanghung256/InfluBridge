@@ -33,3 +33,10 @@ export const CAMPAIGN_STATUSES = {
     ACCEPTED: "accepted",
     REJECTED: "rejected",
 };
+
+export const CAMPAIGN_STATUS_OPTIONS = {
+    APPLIED: { label: "Ứng tuyển", value: CAMPAIGN_STATUSES.APPLIED, color: "info" },
+    INVITED: { label: "Mời", value: CAMPAIGN_STATUSES.INVITED, color: "warning" },
+    ACCEPTED: { label: "Chấp nhận", value: CAMPAIGN_STATUSES.ACCEPTED, color: "success" },
+    REJECTED: { label: "Từ chối", value: CAMPAIGN_STATUSES.REJECTED, color: "error" },
+};

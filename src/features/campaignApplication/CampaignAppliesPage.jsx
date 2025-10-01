@@ -23,11 +23,14 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import CategoryIcon from "@mui/icons-material/Category";
 import PriceChangeIcon from "@mui/icons-material/PriceChange";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Menu from "@mui/material/Menu";
 import { api } from "../../../convex/_generated/api";
-import { convexQueryOneTime } from "../../service/convexClient";
-import { CAMPAIGN_STATUSES } from "../../constants/common";
+import { convexQueryOneTime, convexMutation } from "../../service/convexClient";
+import { CAMPAIGN_STATUS_OPTIONS, CAMPAIGN_STATUSES } from "../../constants/common";
 import useCategories from "../../hooks/useCategories";
 import { formatVNDCurrency } from "../../utils/currencyFormatter";
+import FirebaseImg from "../../components/FirebaseImg/FirebaseImg";
 
 function CampaignAppliesPage() {
     const { campaignId } = useParams();
@@ -38,11 +41,12 @@ function CampaignAppliesPage() {
 
     const statusValues = useMemo(() => {
         const vals = CAMPAIGN_STATUSES ? Object.values(CAMPAIGN_STATUSES) : [];
-        return vals.length ? vals : ["applied", "shortlisted", "approved", "rejected"];
+        return vals.length ? vals : ["applied", "invited", "approved", "rejected"];
     }, []);
-    const [status, setStatus] = useState(CAMPAIGN_STATUSES?.APPLIED || statusValues[0] || "applied");
+    const [status, setStatus] = useState("all");
     const [q, setQ] = useState("");
     const [sort, setSort] = useState("recent"); // recent|priceAsc|priceDesc
+    const [updatingId, setUpdatingId] = useState(null);
 
     const categoryMap = useMemo(() => {
         const map = {};
@@ -52,27 +56,24 @@ function CampaignAppliesPage() {
 
     useEffect(() => {
         if (!campaignId) return;
-        let mounted = true;
-        (async () => {
-            try {
-                setLoading(true);
-                setError("");
-                const res = await convexQueryOneTime(api.functions.campaignApplications.getApplicationsGeneral, {
-                    campaignId,
-                    status,
-                });
-                if (!mounted) return;
-                setApplications(res || []);
-            } catch (e) {
-                if (mounted) setError("Không tải được danh sách ứng tuyển.");
-            } finally {
-                if (mounted) setLoading(false);
-            }
-        })();
-        return () => {
-            mounted = false;
-        };
+        getApplications();
     }, [campaignId, status]);
+
+    const getApplications = async () => {
+        try {
+            setLoading(true);
+            setError("");
+            const res = await convexQueryOneTime(api.functions.campaignApplications.getApplicationsGeneral, {
+                campaignId,
+                status: status === "all" ? undefined : status,
+            });
+            setApplications(res || []);
+        } catch (e) {
+            setError("Không tải được danh sách ứng tuyển.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const filtered = useMemo(() => {
         const keyword = q.trim().toLowerCase();
@@ -93,6 +94,30 @@ function CampaignAppliesPage() {
         }
         return list;
     }, [applications, q, sort]);
+
+    // Call backend to update status, then optimistically remove row from current list
+    const handleUpdateStatus = async (
+        influencerId,
+        nextStatus /* 'applied' | 'invited' | 'accepted' | 'rejected' */,
+    ) => {
+        if (!campaignId || !influencerId) return;
+        try {
+            setUpdatingId(influencerId);
+            await convexMutation(api.functions.campaignApplications.updateApplicationStatus, {
+                campaignId,
+                influencerId,
+                status: nextStatus,
+            });
+            // Since current view was fetched by `status`, remove the updated app from list
+            setStatus("all"); // reset filter to show all
+            await getApplications();
+        } catch (e) {
+            console.error(e);
+            alert("Cập nhật trạng thái thất bại. Vui lòng thử lại.");
+        } finally {
+            setUpdatingId(null);
+        }
+    };
 
     return (
         <Box sx={{ bgcolor: "background.default", py: { xs: 3, md: 5 } }}>
@@ -122,9 +147,12 @@ function CampaignAppliesPage() {
                                 onChange={(e) => setStatus(e.target.value)}
                                 sx={{ minWidth: 160 }}
                             >
+                                <MenuItem key="all" value="all">
+                                    Tất cả
+                                </MenuItem>
                                 {statusValues.map((s) => (
                                     <MenuItem key={s} value={s}>
-                                        {toLabel(s)}
+                                        {CAMPAIGN_STATUS_OPTIONS[s.toUpperCase()]?.label}
                                     </MenuItem>
                                 ))}
                             </TextField>
@@ -197,7 +225,13 @@ function CampaignAppliesPage() {
                 ) : (
                     <Stack spacing={1.5}>
                         {filtered.map((app) => (
-                            <ApplicationRow key={app._id} app={app} categoryMap={categoryMap} />
+                            <ApplicationRow
+                                key={app._id}
+                                app={app}
+                                categoryMap={categoryMap}
+                                onUpdateStatus={handleUpdateStatus}
+                                updating={updatingId === app.influencerId}
+                            />
                         ))}
                     </Stack>
                 )}
@@ -206,15 +240,19 @@ function CampaignAppliesPage() {
     );
 }
 
-function ApplicationRow({ app, categoryMap }) {
+function ApplicationRow({ app, categoryMap, onUpdateStatus, updating }) {
     const name = app.influencerDetail?.fullname || "Người dùng";
     const email = app.influencerDetail?.email || "";
     const phone = app.influencerDetail?.phone || "";
     const cats = app.influencer?.categories || [];
     const priceMin = app.influencer?.priceMin || 0;
     const priceMax = app.influencer?.priceMax || 0;
+    const avatarUrl = app.influencer?.avatarUrl || "";
 
     const initials = getInitials(name);
+    const [menuEl, setMenuEl] = useState(null);
+    const openMenu = (e) => setMenuEl(e.currentTarget);
+    const closeMenu = () => setMenuEl(null);
 
     return (
         <Paper
@@ -227,7 +265,11 @@ function ApplicationRow({ app, categoryMap }) {
             }}
         >
             <Stack direction={{ xs: "column", md: "row" }} spacing={2} alignItems={{ xs: "flex-start", md: "center" }}>
-                <Avatar sx={{ width: 48, height: 48, fontWeight: 600 }}>{initials}</Avatar>
+                {avatarUrl ? (
+                    <FirebaseImg fileName={avatarUrl} width={100} height={100} inputClassName={"rounded-circle"} />
+                ) : (
+                    <Avatar sx={{ width: 48, height: 48, fontWeight: 600 }}>{initials}</Avatar>
+                )}
 
                 <Box flex={1} minWidth={0}>
                     <Stack
@@ -238,7 +280,11 @@ function ApplicationRow({ app, categoryMap }) {
                         <Typography variant="subtitle1" fontWeight={700} noWrap title={name}>
                             {name}
                         </Typography>
-                        <Chip size="small" label={toLabel(app.status)} />
+                        <Chip
+                            className={`border border-2 border-${CAMPAIGN_STATUS_OPTIONS[app.status.toUpperCase()]?.color}`}
+                            size="small"
+                            label={CAMPAIGN_STATUS_OPTIONS[app.status.toUpperCase()]?.label}
+                        />
                     </Stack>
 
                     <Stack
@@ -309,13 +355,27 @@ function ApplicationRow({ app, categoryMap }) {
                     <Button
                         variant="contained"
                         size="small"
-                        onClick={() => {
-                            // TODO: trigger shortlist/approve action
-                            alert("Chức năng duyệt/shortlist đang được phát triển");
-                        }}
+                        endIcon={<MoreVertIcon />}
+                        onClick={openMenu}
+                        disabled={updating}
                     >
-                        Duyệt nhanh
+                        Cập nhật
                     </Button>
+                    <Menu anchorEl={menuEl} open={Boolean(menuEl)} onClose={closeMenu}>
+                        {Object.values(CAMPAIGN_STATUS_OPTIONS)
+                            .filter((o) => o.value !== app.status)
+                            .map((o) => (
+                                <MenuItem
+                                    key={o.value}
+                                    onClick={() => {
+                                        closeMenu();
+                                        onUpdateStatus?.(app.influencerId, o.value);
+                                    }}
+                                >
+                                    {o.label}
+                                </MenuItem>
+                            ))}
+                    </Menu>
                 </Stack>
             </Stack>
         </Paper>

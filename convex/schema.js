@@ -68,6 +68,7 @@ export default defineSchema({
         influencerId: v.id("influencers"),
         status: v.union(v.literal("applied"), v.literal("invited"), v.literal("accepted"), v.literal("rejected")),
         proposal: v.optional(v.string()),
+        updatedAt: v.optional(v.number()),
     }),
 
     categories: defineTable({

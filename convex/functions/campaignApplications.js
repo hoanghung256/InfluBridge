@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { action, mutation, query } from "../_generated/server";
+import { mutation, query } from "../_generated/server";
 
 export const applyIntoCampaign = mutation({
     args: {
@@ -75,5 +75,36 @@ export const getApplicationsGeneral = query({
         );
 
         return enriched;
+    },
+});
+
+export const updateApplicationStatus = mutation({
+    args: {
+        campaignId: v.id("campaigns"),
+        influencerId: v.id("influencers"),
+        status: v.union(v.literal("applied"), v.literal("invited"), v.literal("accepted"), v.literal("rejected")),
+    },
+    handler: async (ctx, { campaignId, influencerId, status }) => {
+        // Find application by campaignId + influencerId
+        const app = await ctx.db
+            .query("campaignApplications")
+            .filter((q) => q.eq(q.field("campaignId"), campaignId))
+            .filter((q) => q.eq(q.field("influencerId"), influencerId))
+            .first();
+
+        if (!app) {
+            throw new Error("Application not found for this campaign and influencer.");
+        }
+
+        // No-op if same status
+        if (app.status === status) {
+            return { ...app, status };
+        }
+
+        const updatedAt = Date.now();
+
+        await ctx.db.patch(app._id, { status, updatedAt });
+
+        return { ...app, status, updatedAt };
     },
 });
