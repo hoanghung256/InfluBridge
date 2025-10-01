@@ -201,17 +201,23 @@ function CampaignDetailPage() {
                                         size="medium"
                                         variant="contained"
                                         color="primary"
-                                        disabled={!isApplyOpen || campaign.status !== "open"}
+                                        // disabled={!isApplyOpen || campaign.status !== "open"}
+                                        disabled={isApplied ||campaign.status !== "open"}
                                         sx={{ mt: 1 }}
                                         onClick={() => setIsShowApplyConfirm(true)}
                                     >
-                                        {campaign.status !== "open"
+                                        {/* {campaign.status !== "open"
                                             ? "Đã đóng"
                                             : isApplied
                                               ? "Đã ứng tuyển"
                                               : isApplyOpen
                                                 ? "Ứng tuyển"
-                                                : "Ngoài thời gian ứng tuyển"}
+                                                : "Ngoài thời gian ứng tuyển"} */}
+                                        {campaign.status !== "open"
+                                            ? "Đã đóng"
+                                            : isApplied
+                                              ? "Đã ứng tuyển"
+                                              : "Ứng tuyển"}
                                     </Button>
                                 )}
                             </Paper>
