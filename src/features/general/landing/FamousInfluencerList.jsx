@@ -81,7 +81,7 @@ function FamousInfluencerList() {
                           return (
                               <Grid item xs={12} sm={6} md={3} key={inf._id}>
                                   <Card
-                                      onClick={() => alert("Chức năng đang được phát triển")}
+                                      onClick={() => navigate(`/influencer/${inf.detail._id}`)}
                                       sx={{
                                           position: "relative",
                                           overflow: "hidden",

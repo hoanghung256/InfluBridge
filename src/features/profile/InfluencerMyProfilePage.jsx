@@ -1,4 +1,4 @@
-import { use, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
     Avatar,
     Box,
@@ -12,7 +12,9 @@ import {
     Chip,
     Divider,
     CircularProgress,
+    IconButton, // + add
 } from "@mui/material";
+import MenuItem from "@mui/material/MenuItem"; // + add
 import { Autocomplete } from "@mui/material";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,8 +24,11 @@ import { setUserData } from "../../store/authSlice";
 import { api } from "../../../convex/_generated/api";
 import { convexMutation } from "../../service/convexClient";
 import FirebaseImg from "../../components/FirebaseImg/FirebaseImg";
-import { STORAGE_FOLDER } from "../../constants/common";
+import { SOCIAL_PLATFORM_OPTIONS, STORAGE_FOLDER } from "../../constants/common";
 import { deleteFile, uploadFile } from "../../service/firebaseStorage"; // add this import
+import AddIcon from "@mui/icons-material/Add"; // + add
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline"; // + add
+import LinkIcon from "@mui/icons-material/Link"; // + add
 
 function InfluencerMyProfilePage() {
     const dispatch = useDispatch();
@@ -109,8 +114,13 @@ function InfluencerMyProfilePage() {
         if (max < 0) e.priceMax = "Giá tối đa không hợp lệ";
         if (min && max && max < min) e.priceMax = "Giá tối đa phải ≥ giá tối thiểu";
         if (!form.categories || form.categories.length === 0) e.categories = "Chọn ít nhất 1 danh mục";
+        // Social: mark invalid if any row has error
+        // if ((form.socialChannel || []).some((r) => Object.keys(socialRowErrors(r)).length > 0)) {
+        //     e.socialChannel = "Kiểm tra liên kết mạng xã hội";
+        // }
         return e;
-    }, [form]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [form]); // uses socialRowErrors from closure
 
     const isInvalid = Object.keys(errors).length > 0;
 
@@ -156,8 +166,12 @@ function InfluencerMyProfilePage() {
                 phone: form.phone?.trim() || "",
                 priceMin: Number(form.priceMin || 0),
                 priceMax: Number(form.priceMax || 0),
-                categories: form.categories.map((o) => o._id), // send as ids
-                socialChannel: form.socialChannel?.map((o) => ({ platform: o.platform, url: o.url })) || [],
+                categories: form.categories.map((o) => o._id),
+                // filter out empty rows
+                socialChannel:
+                    (form.socialChannel || [])
+                        .filter((r) => r.platform && r.url)
+                        .map((o) => ({ platform: o.platform.trim(), url: o.url.trim() })) || [],
             };
 
             // Update on backend (adjust function name if different in your convex functions)
@@ -308,7 +322,7 @@ function InfluencerMyProfilePage() {
                             />
                         </Grid>
                         <Grid item xs={12} md={6}>
-                            <TextField label="Email" value={form.email} fullWidth disabled />
+                            <TextField label="Email" value={form.email} fullWidth slotProps={{ readOnly: true }} />
                         </Grid>
 
                         <Grid item xs={12} md={6}>
@@ -322,8 +336,9 @@ function InfluencerMyProfilePage() {
                             />
                         </Grid>
 
-                        <Grid item xs={12} md={6}>
+                        <Grid item>
                             <Autocomplete
+                                fullWidth
                                 multiple
                                 options={selectableCategories}
                                 loading={catLoading}
@@ -355,7 +370,18 @@ function InfluencerMyProfilePage() {
                             />
                         </Grid>
 
+                        {/* Social channels CRUD */}
                         <Grid item xs={12}>
+                            <SocialChannelBuilder
+                                setForm={setForm}
+                                form={form}
+                                touched={touched}
+                                setTouched={setTouched}
+                                errors={errors}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} md={12}>
                             <TextField
                                 label="Giới thiệu (bio)"
                                 value={form.bio}
@@ -403,6 +429,126 @@ function InfluencerMyProfilePage() {
                 </Paper>
             </Container>
         </Box>
+    );
+}
+
+function SocialChannelBuilder({ setForm, form, touched, setTouched, errors }) {
+    // Supported platforms for socialChannel CRUD
+    const PLATFORMS = useMemo(
+        () => ["YouTube", "Instagram", "TikTok", "Facebook", "Twitter", "Twitch", "LinkedIn", "Website"],
+        [],
+    );
+
+    // Handlers for socialChannel CRUD
+    const addSocialRow = () => {
+        setTouched(true);
+        setForm((f) => ({ ...f, socialChannel: [...(f.socialChannel || []), { platform: "", url: "" }] }));
+    };
+
+    const removeSocialRow = (idx) => {
+        setTouched(true);
+        setForm((f) => ({ ...f, socialChannel: (f.socialChannel || []).filter((_, i) => i !== idx) }));
+    };
+
+    const changeSocialRow = (idx, key, value) => {
+        setTouched(true);
+        setForm((f) => {
+            const next = [...(f.socialChannel || [])];
+            next[idx] = { ...next[idx], [key]: value };
+            return { ...f, socialChannel: next };
+        });
+    };
+
+    const socialRowErrors = (row) => {
+        const errs = {};
+        if (!row.platform?.trim()) errs.platform = "Chọn nền tảng";
+        if (!row.url?.trim()) errs.url = "Nhập URL";
+        else if (!row.url.startsWith("https://")) errs.url = "Bắt đầu bằng https://";
+        return errs;
+    };
+
+    return (
+        <>
+            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }}>
+                <Typography variant="subtitle1" fontWeight={700}>
+                    Mạng xã hội
+                </Typography>
+                <Button size="small" variant="outlined" startIcon={<AddIcon />} onClick={addSocialRow}>
+                    Thêm liên kết
+                </Button>
+            </Stack>
+
+            <Stack spacing={1}>
+                {(form.socialChannel || []).length === 0 && (
+                    <Typography variant="body2" color="text.secondary">
+                        Chưa có liên kết nào. Nhấn “Thêm liên kết” để bắt đầu.
+                    </Typography>
+                )}
+
+                {(form.socialChannel || []).map((row, idx) => {
+                    const rowErr = socialRowErrors(row);
+                    const usedPlatforms = (form.socialChannel || []).map((r, i) => (i === idx ? null : r.platform));
+                    return (
+                        <Paper key={idx} variant="outlined" sx={{ p: 1.5, borderRadius: 2 }}>
+                            <Stack
+                                direction={{ xs: "column", sm: "row" }}
+                                spacing={1}
+                                alignItems={{ xs: "stretch", sm: "center" }}
+                            >
+                                <TextField
+                                    select
+                                    label="Nền tảng"
+                                    value={row.platform || ""}
+                                    onChange={(e) => changeSocialRow(idx, "platform", e.target.value)}
+                                    sx={{ minWidth: { xs: "100%", sm: 180 } }}
+                                    error={touched && !!rowErr.platform}
+                                    helperText={touched && rowErr.platform}
+                                >
+                                    {SOCIAL_PLATFORM_OPTIONS.map((p) => (
+                                        <MenuItem
+                                            key={p.value}
+                                            value={p.value}
+                                            disabled={usedPlatforms.includes(p.value)}
+                                        >
+                                            {p.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+
+                                <TextField
+                                    label="URL"
+                                    placeholder="https://..."
+                                    value={row.url || ""}
+                                    onChange={(e) => changeSocialRow(idx, "url", e.target.value)}
+                                    fullWidth
+                                    InputProps={{
+                                        startAdornment: (
+                                            <LinkIcon fontSize="small" style={{ marginRight: 6, opacity: 0.7 }} />
+                                        ),
+                                    }}
+                                    error={touched && !!rowErr.url}
+                                    helperText={touched && rowErr.url}
+                                />
+
+                                <IconButton
+                                    color="error"
+                                    onClick={() => removeSocialRow(idx)}
+                                    aria-label="remove social link"
+                                >
+                                    <DeleteOutlineIcon />
+                                </IconButton>
+                            </Stack>
+                        </Paper>
+                    );
+                })}
+
+                {touched && errors.socialChannel && (form.socialChannel || []).length > 0 && (
+                    <Typography variant="caption" color="error">
+                        {errors.socialChannel}
+                    </Typography>
+                )}
+            </Stack>
+        </>
     );
 }
 

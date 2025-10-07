@@ -61,3 +61,21 @@ export const getFamousInfluencers = query({
         }));
     },
 });
+
+export const getById = query({
+    args: {
+        influencerId: v.id("influencers"),
+    },
+    handler: async (ctx, args) => {
+        const influencer = await ctx.db.get("influencers", args.influencerId);
+        if (!influencer) return null;
+
+        const user = await ctx.db.get("users", influencer.userId);
+        if (!user) return null;
+
+        return {
+            ...user,
+            detail: influencer,
+        };
+    },
+});
