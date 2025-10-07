@@ -79,6 +79,12 @@ export default defineSchema({
         parentId: v.optional(v.id("categories")),
     }),
 
+    systemFeedback: defineTable({
+        userId: v.id("users"),
+        title: v.optional(v.string()),
+        message: v.string(),
+    }),
+
     // contracts: defineTable({
     //     campaignId: v.id("campaigns"),
     //     influencerId: v.id("influencers"),

@@ -13,11 +13,11 @@ export const routes = [
     { element: <AuthLayout />, children: authRoutes },
     { element: <GeneralLayout />, children: generalRoutes },
     {
-        element: <ProtectedRoute allowedRoles={USER_ROLES.BRAND} children={<BrandLayout />} />,
+        element: <ProtectedRoute allowedRoles={[USER_ROLES.BRAND]} children={<BrandLayout />} />,
         children: brandRoutes,
     },
     {
-        element: <ProtectedRoute allowedRoles={USER_ROLES.INFLUENCER} children={<GeneralLayout />} />,
+        element: <ProtectedRoute allowedRoles={[USER_ROLES.INFLUENCER]} children={<GeneralLayout />} />,
         children: influencerRoutes,
     },
 ];

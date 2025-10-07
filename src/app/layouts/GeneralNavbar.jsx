@@ -37,10 +37,11 @@ function GeneralNavbar() {
         { label: "Campaigns", to: "/campaigns" },
         { label: "Influencers", to: "/" },
         { label: "About us", to: "/about-us" },
+        { label: "Đóng góp ý kiến", to: "/feedback" },
     ];
 
     const renderButtons = () => {
-        if (isMdUp && (convexUser?.role === USER_ROLES.INFLUENCER || convexUser?.role === USER_ROLES.BRAND)) {
+        if (isMdUp && (convexUser?.role === USER_ROLES.INFLUENCER || convexUser?.role === USER_ROLES.BRAND || convexUser?.role === USER_ROLES.ADMIN)) {
             return (
                 <>
                     <Button component={RouterLink} to={`/${convexUser?.role}/my-profile`} variant="text" size="small">

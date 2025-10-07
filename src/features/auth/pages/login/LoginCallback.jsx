@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../../../store/authSlice";
 import useCategories from "../../../../hooks/useCategories";
+import { USER_ROLES } from "../../../../constants/common";
 
 function LoginCallback() {
     const { user } = useClerkUserData();
@@ -78,8 +79,9 @@ function LoginCallback() {
             })();
         }
         if (fetchedUser) {
-            if (fetchedUser.role === "brand") navigate("/campaigns");
-            if (fetchedUser.role === "influencer") navigate("/");
+            if (fetchedUser.role === USER_ROLES.BRAND) navigate("/campaigns");
+            if (fetchedUser.role === USER_ROLES.INFLUENCER) navigate("/");
+            if (fetchedUser.role === USER_ROLES.ADMIN) navigate("/admin/feedbacks");
         }
         console.log(user);
     }, [user, fetchedUser, navigate]);

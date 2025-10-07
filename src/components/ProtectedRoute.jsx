@@ -9,7 +9,7 @@ function ProtectedRoute({ allowedRoles, children }) {
         return <CircularProgress />;
     }
 
-    if (user?.role !== allowedRoles) {
+    if (!allowedRoles.includes(user?.role)) {
         return <Navigate to="/login" />;
     } else {
         return children;
