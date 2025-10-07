@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { convexQueryOneTime } from "../../service/convexClient";
 import { api } from "../../../convex/_generated/api";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
     Box,
     Paper,
@@ -20,32 +20,32 @@ import { formatVNDCurrency } from "../../utils/currencyFormatter";
 import { icons } from "../../constants/icons";
 import CategoryChips from "../../components/CategoryChips";
 
-function ViewOnlyInfluencerProfilePage() {
-    const { influencerId } = useParams();
+function ViewOnlyBrandProfilePage() {
+    const { brandId } = useParams();
 
-    const [influencerData, setInfluencerData] = useState(null);
+    const [brandData, setBrandData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        if (influencerId) getInfluencerData(influencerId);
+        if (brandId) getBrandData(brandId);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [influencerId]);
+    }, [brandId]);
 
-    const getInfluencerData = async (id) => {
+    const getBrandData = async (id) => {
         try {
             setIsLoading(true);
-            const res = await convexQueryOneTime(api.functions.influencers.getById, { influencerId: id });
-            setInfluencerData(res);
+            const res = await convexQueryOneTime(api.functions.brands.getById, { brandId: id });
+            setBrandData(res);
         } catch (e) {
-            console.error("Failed to fetch influencer data:", e);
-            setInfluencerData(null);
+            console.error("Failed to fetch brand data:", e);
+            setBrandData(null);
         } finally {
             setIsLoading(false);
         }
     };
 
-    const detail = influencerData?.detail;
-
+    const detail = brandData?.detail;
+    
     const initials = (name) =>
         (name || "")
             .split(" ")
@@ -62,10 +62,10 @@ function ViewOnlyInfluencerProfilePage() {
         );
     }
 
-    if (!influencerData || !detail) {
+    if (!brandData || !detail) {
         return (
             <Box sx={{ p: 3, textAlign: "center", color: "text.secondary" }}>
-                <Typography variant="body1">Không tìm thấy hồ sơ influencer.</Typography>
+                <Typography variant="body1">Không tìm thấy hồ sơ thương hiệu.</Typography>
             </Box>
         );
     }
@@ -83,25 +83,25 @@ function ViewOnlyInfluencerProfilePage() {
                         flexShrink: 0,
                         border: "1px solid #eee",
                     }}
-                    alt={influencerData.fullname}
+                    alt={brandData.fullname}
                 >
                     {detail.avatarUrl ? (
                         <FirebaseImg
                             fileName={detail.avatarUrl}
-                            alt={influencerData.fullname || "Avatar"}
+                            alt={brandData.fullname || "Avatar"}
                             style={{ width: "100%", height: "100%", objectFit: "cover" }}
                         />
                     ) : (
-                        initials(influencerData.fullname)
+                        initials(brandData.fullname)
                     )}
                 </Avatar>
 
                 <Box sx={{ flex: 1 }}>
                     <Stack direction="row" alignItems="center" spacing={1}>
                         <Typography variant="h5" fontWeight={600}>
-                            {influencerData.fullname}
+                            {detail.brandName || brandData.fullname}
                         </Typography>
-                        {influencerData.isVerified && (
+                        {brandData.isVerified && (
                             <Tooltip title="Đã xác minh">
                                 <Verified color="primary" fontSize="small" />
                             </Tooltip>
@@ -109,14 +109,13 @@ function ViewOnlyInfluencerProfilePage() {
                     </Stack>
 
                     <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                        {influencerData.email && `📧 ${influencerData.email}`}{" "}
-                        {influencerData.phone && `• 📱 ${influencerData.phone}`}
+                        {brandData.email && `📧 ${brandData.email}`} {brandData.phone && `• 📱 ${brandData.phone}`}
                     </Typography>
 
                     <Typography sx={{ mt: 1.5 }}>
-                        <strong>Mức giá:</strong>{" "}
+                        <strong>Ngân sách:</strong>{" "}
                         <Typography component="span" color="primary.main" fontWeight={600}>
-                            {formatVNDCurrency(detail.priceMin)} - {formatVNDCurrency(detail.priceMax)}
+                            {formatVNDCurrency(detail.budgetMin)} - {formatVNDCurrency(detail.budgetMax)}
                         </Typography>
                     </Typography>
                 </Box>
@@ -128,7 +127,17 @@ function ViewOnlyInfluencerProfilePage() {
                     Giới thiệu
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary", whiteSpace: "pre-wrap" }}>
-                    {detail.bio || "Chưa có mô tả."}
+                    {detail.description || "Chưa có mô tả."}
+                </Typography>
+            </Paper>
+
+            {/* Description */}
+            <Paper elevation={1} sx={{ mt: 3, p: 3 }}>
+                <Typography variant="h6" gutterBottom>
+                    Mô tả chi tiết
+                </Typography>
+                <Typography variant="body2" sx={{ color: "text.secondary", whiteSpace: "pre-wrap" }}>
+                    {detail.description || "Chưa có mô tả chi tiết."}
                 </Typography>
             </Paper>
 
@@ -182,4 +191,4 @@ function ViewOnlyInfluencerProfilePage() {
     );
 }
 
-export default ViewOnlyInfluencerProfilePage;
+export default ViewOnlyBrandProfilePage;

@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaYoutube, FaPager } from "react-icons/fa";
 import { SiTiktok } from "react-icons/si";
 import BoltOutlinedIcon from "@mui/icons-material/BoltOutlined";
 
@@ -8,7 +8,12 @@ export const icons = {
     instagram: <InstagramIcon />,
     tiktok: <TiktokIcon />,
     youtube: <YoutubeIcon />,
+    website: <WebsiteIcon />,
 };
+
+export function WebsiteIcon() {
+    return <FaPager size={"1em"} color="#1877F2" style={{ borderRadius: "8px" }} />;
+}
 
 export function FacebookIcon() {
     return <FaFacebookF size={"1em"} color="#1877F2" style={{ borderRadius: "8px" }} />;

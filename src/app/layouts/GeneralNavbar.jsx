@@ -40,10 +40,10 @@ function GeneralNavbar() {
     ];
 
     const renderButtons = () => {
-        if (isMdUp && convexUser?.role === USER_ROLES.INFLUENCER) {
+        if (isMdUp && (convexUser?.role === USER_ROLES.INFLUENCER || convexUser?.role === USER_ROLES.BRAND)) {
             return (
                 <>
-                    <Button component={RouterLink} to="/influencer/my-profile" variant="text" size="small">
+                    <Button component={RouterLink} to={`/${convexUser?.role}/my-profile`} variant="text" size="small">
                         {convexUser?.detail?.avatarUrl ? (
                             <FirebaseImg
                                 fileName={convexUser.detail.avatarUrl}
@@ -61,10 +61,6 @@ function GeneralNavbar() {
                     </Button>
                 </>
             );
-        }
-
-        if (convexUser?.role === USER_ROLES.BRAND) {
-            return <UserButton afterSignOutUrl="/signout-callback" />;
         }
 
         if (!user || !convexUser) {

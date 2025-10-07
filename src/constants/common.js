@@ -8,6 +8,7 @@ export const SOCIAL_PLATFORMS = {
     INSTAGRAM: "instagram",
     TIKTOK: "tiktok",
     YOUTUBE: "youtube",
+    WEBSITE: "website",
     // TWITTER: "twitter",
     // LINKEDIN: "linkedin",
     // SNAPCHAT: "snapchat",
@@ -19,6 +20,7 @@ export const SOCIAL_PLATFORM_OPTIONS = [
     { label: "Instagram", value: SOCIAL_PLATFORMS.INSTAGRAM },
     { label: "TikTok", value: SOCIAL_PLATFORMS.TIKTOK },
     { label: "YouTube", value: SOCIAL_PLATFORMS.YOUTUBE },
+    { label: "Website", value: SOCIAL_PLATFORMS.WEBSITE },
 ];
 
 export const USER_ROLES = {

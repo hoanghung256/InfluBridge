@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import { convexQueryOneTime } from "../../../service/convexClient";
 import { api } from "../../../../convex/_generated/api";
 import { Box, Container, Grid, Paper, Stack, Typography, Chip, Divider, Button, CircularProgress } from "@mui/material";
@@ -8,6 +8,7 @@ import FirebaseImg from "../../../components/FirebaseImg/FirebaseImg";
 import useConvexUserData from "../../../hooks/useConvexUserData";
 import { USER_ROLES } from "../../../constants/common";
 import CampaignApplyConfirmModal from "../../campaignApplication/CampaignApplyConfirmModal";
+import CategoryChips from "../../../components/CategoryChips";
 
 function CampaignDetailPage() {
     const { campaignId } = useParams();
@@ -87,6 +88,15 @@ function CampaignDetailPage() {
                                         {campaign.location || "—"}
                                     </Typography>
                                     <Typography
+                                        variant="overline"
+                                        color="text.secondary"
+                                        component={Link}
+                                        to={`/brand/${campaign.brandId}`}
+                                        sx={{ textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+                                    >
+                                        {campaign.brandId}
+                                    </Typography>
+                                    <Typography
                                         fontSize={20}
                                         fontWeight={600}
                                         sx={{
@@ -132,11 +142,7 @@ function CampaignDetailPage() {
                                     </Box>
 
                                     {/* Categories */}
-                                    <Stack direction="row" spacing={1} flexWrap="wrap" mt={1}>
-                                        {(campaign.categories || []).map((cid) => (
-                                            <Chip key={cid} label={cid || "Danh mục"} size="small" />
-                                        ))}
-                                    </Stack>
+                                    <CategoryChips categoryIds={campaign.categories} sx={{ mt: 1 }} />
 
                                     <Divider sx={{ my: 2 }} />
 

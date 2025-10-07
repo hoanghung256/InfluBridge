@@ -17,7 +17,9 @@ export default defineSchema({
         brandName: v.string(),
         budgetMin: v.number(),
         budgetMax: v.number(),
+        avatarUrl: v.optional(v.string()),
         categories: v.array(v.id("categories")),
+        socialChannel: v.optional(v.array(v.object({ platform: v.string(), url: v.string() }))),
         description: v.optional(v.string()),
     }).index("by_user", ["userId"]),
 

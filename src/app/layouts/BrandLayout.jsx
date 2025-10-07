@@ -44,7 +44,7 @@ function BrandLayout() {
             // { label: "Dashboard", icon: <DashboardCustomizeIcon />, to: "/campaigns" },
             { label: "Campaigns", icon: <CampaignIcon />, to: "/campaigns" },
             { label: "Create Campaign", icon: <AddCircleOutlineIcon />, to: "/campaigns/create" },
-            { label: "Applications", icon: <AssignmentIndIcon />, to: "#" },
+            { label: "Profile", icon: <AssignmentIndIcon />, to: "/brand/my-profile" },
             { label: "Analytics", icon: <InsightsIcon />, to: "#" },
             { label: "Settings", icon: <SettingsIcon />, to: "#" },
         ],
