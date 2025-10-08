@@ -37,6 +37,26 @@ export const applyIntoCampaign = mutation({
             influencerId,
             status: "applied",
         });
+
+        // 5. Notify brand about new application
+        try {
+            const brand = await ctx.db.get(campaign.brandId);
+            const brandUser = brand ? await ctx.db.get(brand.userId) : null;
+            const influencerUser = await ctx.db.get(influencer.userId);
+
+            if (brandUser?._id) {
+                await ctx.db.insert("notifications", {
+                    userId: brandUser._id,
+                    title: "Ứng tuyển mới",
+                    message: `Influencer ${influencerUser?.fullname || ""} đã ứng tuyển vào chiến dịch "${campaign.title || ""}"`,
+                    type: "application.applied",
+                    read: false,
+                    meta: { campaignId, brandId: brand?._id, influencerId, status: "applied" },
+                });
+            }
+        } catch (e) {
+            console.error("Failed to create brand notification for new application:", e);
+        }
         return { applicationId: appId };
     },
 });
@@ -110,11 +130,11 @@ export const updateApplicationStatus = mutation({
         if (status === "accepted") {
             try {
                 // Load influencer, user (email), campaign, brand for email context
-                // const influencer = await ctx.db.get(influencerId);
-                // const influencerUser = influencer ? await ctx.db.get(influencer.userId) : null;
-                // const campaign = await ctx.db.get(campaignId);
-                // const brand = campaign ? await ctx.db.get(campaign.brandId) : null;
-                // const brandUser = brand ? await ctx.db.get(brand.userId) : null;
+                const influencer = await ctx.db.get(influencerId);
+                const influencerUser = influencer ? await ctx.db.get(influencer.userId) : null;
+                const campaign = await ctx.db.get(campaignId);
+                const brand = campaign ? await ctx.db.get(campaign.brandId) : null;
+                const brandUser = brand ? await ctx.db.get(brand.userId) : null;
 
                 // if (influencerUser?.email && campaign && brand) {
                 //     // Fire-and-forget action to send email
