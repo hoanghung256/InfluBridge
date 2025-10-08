@@ -7,6 +7,11 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 import AppIcon from "../../constants/icons";
 
+// Reserve space for the fixed footer in pages to prevent overlap
+export function FooterSpacer() {
+    return <Box sx={{ height: { xs: 520, md: 360 } }} />;
+}
+
 function GeneralFooter() {
     const year = new Date().getFullYear();
     const column = (title, items) => (
@@ -39,7 +44,20 @@ function GeneralFooter() {
     );
 
     return (
-        <Box component="footer" sx={{ mt: 8, bgcolor: "#0e1217", color: "grey.300" }}>
+        <Box
+            component="footer"
+            sx={{
+                position: "fixed",
+                left: 0,
+                right: 0,
+                bottom: 0,
+                width: "100%",
+                bgcolor: "#0e1217",
+                color: "grey.300",
+                zIndex: (t) => t.zIndex.appBar - 1,
+                borderTop: (t) => `1px solid rgba(255,255,255,0.08)`,
+            }}
+        >
             <Box sx={{ maxWidth: 1280, mx: "auto", px: { xs: 3, md: 6 }, py: { xs: 6, md: 8 } }}>
                 <Grid container spacing={6}>
                     <Grid item xs={12} md={4}>
