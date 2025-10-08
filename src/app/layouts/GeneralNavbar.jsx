@@ -37,6 +37,7 @@ function GeneralNavbar() {
     const navItems = [
         { label: "Campaigns", to: "/campaigns" },
         { label: "Influencers", to: "/influencers" },
+        { label: "Brands", to: "/brands" },
         { label: "About us", to: "/about-us" },
         { label: "Đóng góp ý kiến", to: "/feedback" },
     ];

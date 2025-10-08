@@ -7,12 +7,14 @@ import LandingPage from "../../features/general/landing/LandingPage";
 import ViewOnlyBrandProfilePage from "../../features/profile/ViewOnlyBrandProfilePage";
 import ViewOnlyInfluencerProfilePage from "../../features/profile/ViewOnlyInfluencerProfilePage";
 import AllInfluencerPage from "../../features/general/AllInfluencerPage";
+import AllBrandPage from "../../features/general/AllBrandPage";
 import FeedbackViewPage from "../../features/general/feedback/AdminFeedbackPage";
 
 export const generalRoutes = [
     { path: "/", element: <LandingPage /> },
     { path: "/campaign/:campaignId", element: <CampaignDetailPage /> },
     { path: "/influencers", element: <AllInfluencerPage /> },
+    { path: "/brands", element: <AllBrandPage /> },
     { path: "/about-us", element: <AboutUsPage /> },
     { path: "/influencer/:influencerId", element: <ViewOnlyInfluencerProfilePage /> },
     { path: "/brand/:brandId", element: <ViewOnlyBrandProfilePage /> },

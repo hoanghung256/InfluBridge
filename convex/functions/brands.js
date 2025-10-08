@@ -62,3 +62,18 @@ export const getById = query({
         };
     },
 });
+
+export const getAll = query({
+    args: {
+        limit: v.optional(v.number()),
+    },
+    handler: async (ctx, args) => {
+        const limit = args.limit ?? 1000;
+        const brands = await ctx.db.query("brands").take(limit);
+        const users = await Promise.all(brands.map((b) => ctx.db.get(b.userId)));
+        return brands.map((b, idx) => ({
+            ...users[idx],
+            detail: b,
+        }));
+    },
+});
