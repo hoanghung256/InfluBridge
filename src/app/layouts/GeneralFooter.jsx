@@ -47,14 +47,9 @@ function GeneralFooter() {
         <Box
             component="footer"
             sx={{
-                position: "fixed",
-                left: 0,
-                right: 0,
-                bottom: 0,
-                width: "100%",
+                mt: "auto", // footer sẽ đẩy xuống đáy khi parent là flex column
                 bgcolor: "#0e1217",
                 color: "grey.300",
-                zIndex: (t) => t.zIndex.appBar - 1,
                 borderTop: (t) => `1px solid rgba(255,255,255,0.08)`,
             }}
         >
