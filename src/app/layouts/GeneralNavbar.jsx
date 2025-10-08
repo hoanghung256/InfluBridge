@@ -24,6 +24,7 @@ import FirebaseImg from "../../components/FirebaseImg/FirebaseImg";
 import { initialsOf } from "../../utils/helper";
 import useConvexUserData from "../../hooks/useConvexUserData";
 import { USER_ROLES } from "../../constants/common";
+import NotificationBell from "../../components/NotificationBell";
 
 function GeneralNavbar() {
     const theme = useTheme();
@@ -41,7 +42,12 @@ function GeneralNavbar() {
     ];
 
     const renderButtons = () => {
-        if (isMdUp && (convexUser?.role === USER_ROLES.INFLUENCER || convexUser?.role === USER_ROLES.BRAND || convexUser?.role === USER_ROLES.ADMIN)) {
+        if (
+            isMdUp &&
+            (convexUser?.role === USER_ROLES.INFLUENCER ||
+                convexUser?.role === USER_ROLES.BRAND ||
+                convexUser?.role === USER_ROLES.ADMIN)
+        ) {
             return (
                 <>
                     <Button component={RouterLink} to={`/${convexUser?.role}/my-profile`} variant="text" size="small">
@@ -136,7 +142,10 @@ function GeneralNavbar() {
 
                     <Box sx={{ flexGrow: 1 }} />
 
-                    <Box sx={{ display: "flex", gap: 1 }}>{renderButtons()}</Box>
+                    <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                        {convexUser?._id && <NotificationBell />}
+                        {renderButtons()}
+                    </Box>
                 </Toolbar>
             </AppBar>
 

@@ -11,17 +11,22 @@ import { CLERK_PUBLISHABLE_KEY } from "./constants/env.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ThemeProvider } from "@emotion/react";
 import theme from "./styles/theme.jsx";
+import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { CONVEX_HTTP_URL } from "./constants/env.js";
 
 const router = createBrowserRouter(routes);
 const store = configureStore({ reducer: rootReducer });
+const convex = new ConvexReactClient(CONVEX_HTTP_URL);
 
 createRoot(document.getElementById("root")).render(
     <ThemeProvider theme={theme}>
         <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
-            <Provider store={store}>
-                <RouterProvider router={router} />
-                <Toaster position="top-right" />
-            </Provider>
+            <ConvexProvider client={convex}>
+                <Provider store={store}>
+                    <RouterProvider router={router} />
+                    <Toaster position="top-right" />
+                </Provider>
+            </ConvexProvider>
         </ClerkProvider>
     </ThemeProvider>,
 );

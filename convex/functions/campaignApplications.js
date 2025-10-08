@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "../_generated/server";
+import { internal } from "../_generated/api";
 
 export const applyIntoCampaign = mutation({
     args: {
@@ -104,6 +105,42 @@ export const updateApplicationStatus = mutation({
         const updatedAt = Date.now();
 
         await ctx.db.patch(app._id, { status, updatedAt });
+
+        // If accepted, send email + create in-app notification to influencer
+        if (status === "accepted") {
+            try {
+                // Load influencer, user (email), campaign, brand for email context
+                // const influencer = await ctx.db.get(influencerId);
+                // const influencerUser = influencer ? await ctx.db.get(influencer.userId) : null;
+                // const campaign = await ctx.db.get(campaignId);
+                // const brand = campaign ? await ctx.db.get(campaign.brandId) : null;
+                // const brandUser = brand ? await ctx.db.get(brand.userId) : null;
+
+                // if (influencerUser?.email && campaign && brand) {
+                //     // Fire-and-forget action to send email
+                //     await ctx.scheduler.runAfter(0, internal.functions.emails.sendInfluencerAcceptedEmail, {
+                //         toEmail: influencerUser.email,
+                //         toName: influencerUser.fullname,
+                //         brandName: brand.brandName || brandUser?.fullname || "Thương hiệu",
+                //         campaignTitle: campaign.title || "Chiến dịch",
+                //     });
+                // }
+
+                // In-app notification for influencer
+                if (influencerUser?._id) {
+                    await ctx.db.insert("notifications", {
+                        userId: influencerUser._id,
+                        title: "Ứng tuyển được chấp nhận",
+                        message: `Thương hiệu ${brand?.brandName || brandUser?.fullname || ""} đã chấp nhận ứng tuyển vào chiến dịch "${campaign?.title || ""}".`,
+                        type: "application.accepted",
+                        read: false,
+                        meta: { campaignId, brandId: brand?._id, influencerId, status: "accepted" },
+                    });
+                }
+            } catch (e) {
+                console.error("Failed to schedule acceptance email:", e);
+            }
+        }
 
         return { ...app, status, updatedAt };
     },

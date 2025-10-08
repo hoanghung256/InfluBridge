@@ -79,6 +79,22 @@ export default defineSchema({
         parentId: v.optional(v.id("categories")),
     }),
 
+    notifications: defineTable({
+        userId: v.id("users"),
+        title: v.optional(v.string()),
+        message: v.string(),
+        type: v.optional(v.string()),
+        read: v.optional(v.boolean()),
+        meta: v.optional(
+            v.object({
+                campaignId: v.optional(v.id("campaigns")),
+                brandId: v.optional(v.id("brands")),
+                influencerId: v.optional(v.id("influencers")),
+                status: v.optional(v.string()),
+            }),
+        ),
+    }).index("by_user", ["userId"]),
+
     systemFeedback: defineTable({
         userId: v.id("users"),
         title: v.optional(v.string()),
