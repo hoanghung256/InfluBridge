@@ -3,7 +3,6 @@ import { Box, Grid, Card, CardContent, Stack, Typography, Chip, Skeleton, Avatar
 import { api } from "../../../convex/_generated/api";
 import { convexQueryOneTime } from "../../service/convexClient";
 import useCategories from "../../hooks/useCategories";
-import FirebaseImg from "../../components/FirebaseImg/FirebaseImg";
 import { useNavigate } from "react-router-dom";
 import InfluencerCard from "./landing/InfluencerCard";
 
@@ -67,20 +66,13 @@ function AllInfluencerPage() {
                               </Grid>
                           ))
                         : influencers.map((inf) => {
-                              const fullname = inf.fullname || inf.influencerDetail?.fullname || "Influencer";
-                              const avatarUrl =
-                                  inf.avatarUrl || inf.influencerDetail?.avatarUrl || inf.detail?.avatarUrl || "";
-                              const catIds =
-                                  inf.categories || inf.detail?.categories || inf.influencer?.categories || [];
-                              const catNames = (catIds || []).map((id) => categoryMap[id] || "Danh mục");
-
                               return (
                                   <Grid item xs={12} sm={6} md={3} key={inf._id}>
                                       <InfluencerCard
                                           influencer={inf}
                                           categoryMap={categoryMap}
                                           isSelf={false}
-                                          onClick={() => navigate(`/influencer/${inf._id}`)}
+                                          onClick={() => navigate(`/influencer/${inf.detail._id}`)}
                                       />
                                   </Grid>
                               );
