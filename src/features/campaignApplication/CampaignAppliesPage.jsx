@@ -31,6 +31,7 @@ import { CAMPAIGN_STATUS_OPTIONS, CAMPAIGN_STATUSES } from "../../constants/comm
 import useCategories from "../../hooks/useCategories";
 import { formatVNDCurrency } from "../../utils/currencyFormatter";
 import FirebaseImg from "../../components/FirebaseImg/FirebaseImg";
+import { Link } from "react-router-dom";
 
 function CampaignAppliesPage() {
     const { campaignId } = useParams();
@@ -277,7 +278,14 @@ function ApplicationRow({ app, categoryMap, onUpdateStatus, updating }) {
                         spacing={1}
                         alignItems={{ xs: "flex-start", sm: "center" }}
                     >
-                        <Typography variant="subtitle1" fontWeight={700} noWrap title={name}>
+                        <Typography
+                            variant="subtitle1"
+                            fontWeight={700}
+                            noWrap
+                            title={name}
+                            component={Link}
+                            to={`/influencer/${app.influencerId}`}
+                        >
                             {name}
                         </Typography>
                         <Chip
