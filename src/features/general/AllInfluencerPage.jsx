@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Box, Grid, Card, CardContent, Stack, Typography, Chip, Skeleton, Avatar, Container } from "@mui/material";
+import { Box, Card, CardContent, Stack, Typography, Skeleton, Avatar, Container } from "@mui/material";
 import { api } from "../../../convex/_generated/api";
 import { convexQueryOneTime } from "../../service/convexClient";
 import useCategories from "../../hooks/useCategories";
@@ -40,44 +40,41 @@ function AllInfluencerPage() {
             <Typography variant="h5" fontWeight={700} sx={{ mb: 2 }}>
                 Tất cả Influencer
             </Typography>
-            <Box>
-                <Grid container spacing={3}>
-                    {loading
-                        ? skeletons.map((_, i) => (
-                              <Grid item xs={12} sm={6} md={3} key={`sk-${i}`}>
-                                  <Card variant="outlined" sx={{ borderRadius: 2 }}>
-                                      <CardContent>
-                                          <Stack spacing={1.2} alignItems="center">
-                                              <Skeleton variant="circular" width={96} height={96} />
-                                              <Skeleton width="80%" />
-                                              <Stack
-                                                  direction="row"
-                                                  spacing={0.5}
-                                                  flexWrap="wrap"
-                                                  justifyContent="center"
-                                                  width="100%"
-                                              >
-                                                  <Skeleton variant="rounded" width={70} height={24} />
-                                                  <Skeleton variant="rounded" width={70} height={24} />
-                                              </Stack>
+
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
+                {loading
+                    ? skeletons.map((_, i) => (
+                          <Box key={`sk-${i}`} sx={{ flex: "1 1 240px", maxWidth: 320 }}>
+                              <Card variant="outlined" sx={{ borderRadius: 2, width: 272 }}>
+                                  <CardContent>
+                                      <Stack spacing={1.2} alignItems="center">
+                                          <Skeleton variant="circular" width={96} height={96} />
+                                          <Skeleton width="80%" />
+                                          <Stack
+                                              direction="row"
+                                              spacing={0.5}
+                                              flexWrap="wrap"
+                                              justifyContent="center"
+                                              width="100%"
+                                          >
+                                              <Skeleton variant="rounded" width={70} height={24} />
+                                              <Skeleton variant="rounded" width={70} height={24} />
                                           </Stack>
-                                      </CardContent>
-                                  </Card>
-                              </Grid>
-                          ))
-                        : influencers.map((inf) => {
-                              return (
-                                  <Grid item xs={12} sm={6} md={3} key={inf._id}>
-                                      <InfluencerCard
-                                          influencer={inf}
-                                          categoryMap={categoryMap}
-                                          isSelf={false}
-                                          onClick={() => navigate(`/influencer/${inf.detail._id}`)}
-                                      />
-                                  </Grid>
-                              );
-                          })}
-                </Grid>
+                                      </Stack>
+                                  </CardContent>
+                              </Card>
+                          </Box>
+                      ))
+                    : influencers.map((inf) => (
+                          <Box key={inf._id} sx={{ flex: "1 1 240px", maxWidth: 320 }}>
+                              <InfluencerCard
+                                  influencer={inf}
+                                  categoryMap={categoryMap}
+                                  isSelf={false}
+                                  onClick={() => inf.detail?._id && navigate(`/influencer/${inf.detail._id}`)}
+                              />
+                          </Box>
+                      ))}
             </Box>
         </Container>
     );

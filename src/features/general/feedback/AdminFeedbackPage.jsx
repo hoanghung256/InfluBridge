@@ -67,7 +67,7 @@ function FeedbackViewPage() {
                                     {f.title || "(Không có tiêu đề)"}
                                 </Typography>
                                 <Typography variant="caption" color="text.secondary">
-                                    {new Date(f._creationTime).toLocaleString("vi-VN")}
+                                    {f.createdAt ? new Date(f.createdAt).toLocaleString("vi-VN") : ""}
                                 </Typography>
                             </Stack>
                             <Typography variant="body2" sx={{ whiteSpace: "pre-wrap" }}>

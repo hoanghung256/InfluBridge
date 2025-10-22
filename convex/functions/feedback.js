@@ -16,6 +16,7 @@ export const create = mutation({
             userId: args.userId,
             title: args.title,
             message: args.message,
+            createdAt: Date.now(),
         });
 
         return { _id: feedbackId };
@@ -46,6 +47,6 @@ export const listAll = query({
             }),
         );
         // Recent first
-        return withUsers.sort((a, b) => (b._creationTime || 0) - (a._creationTime || 0));
+        return withUsers.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     },
 });

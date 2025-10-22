@@ -99,6 +99,7 @@ export default defineSchema({
         userId: v.id("users"),
         title: v.optional(v.string()),
         message: v.string(),
+        createdAt: v.optional(v.number()),
     }),
 
     // contracts: defineTable({
