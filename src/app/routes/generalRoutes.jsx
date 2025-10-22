@@ -24,8 +24,12 @@ export const generalRoutes = [
             <ProtectedRoute allowedRoles={[USER_ROLES.INFLUENCER, USER_ROLES.BRAND]} children={<FeedbackForm />} />
         ),
     },
+    // {
+    //     path: "/admin/feedbacks",
+    //     element: <ProtectedRoute allowedRoles={[USER_ROLES.ADMIN]} children={<FeedbackViewPage />} />,
+    // },
     {
         path: "/admin/feedbacks",
-        element: <ProtectedRoute allowedRoles={[USER_ROLES.ADMIN]} children={<FeedbackViewPage />} />,
+        element: <FeedbackViewPage />,
     },
 ];
